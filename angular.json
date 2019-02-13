@@ -164,6 +164,41 @@
           }
         }
       }
+    },
+    "angular-d2-forms-material": {
+      "root": "projects/angular-d2-forms-material",
+      "sourceRoot": "projects/angular-d2-forms-material/src",
+      "projectType": "library",
+      "prefix": "ad2formsmaterial",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/angular-d2-forms-material/tsconfig.lib.json",
+            "project": "projects/angular-d2-forms-material/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/angular-d2-forms-material/src/test.ts",
+            "tsConfig": "projects/angular-d2-forms-material/tsconfig.spec.json",
+            "karmaConfig": "projects/angular-d2-forms-material/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/angular-d2-forms-material/tsconfig.lib.json",
+              "projects/angular-d2-forms-material/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "angular-d2-forms"

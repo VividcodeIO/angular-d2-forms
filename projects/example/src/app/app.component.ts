@@ -16,13 +16,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormDescriptor('simple', [
-      new SingleFormField('name', 'text'),
+      new SingleFormField('name', 'string'),
+      new SingleFormField('vip', 'boolean'),
       new FormFieldsGroup('address', [
-        new SingleFormField('street', 'text'),
+        new SingleFormField('street', 'string'),
       ]),
     ], 'simple');
     this.initValue = {
       name: 'alex',
+      vip: true,
       address: {
         street: 'test',
       },

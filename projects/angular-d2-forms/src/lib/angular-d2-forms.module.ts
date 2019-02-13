@@ -10,6 +10,7 @@ import { FormFieldEditorComponent } from './components/form-field-editor/form-fi
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './store/state';
 import { FormService } from './services/form.service';
+import { FieldEditorRegistryService } from './services/field-editor-registry.service';
 
 @NgModule({
   declarations: [FormComponent, FieldBasicInputComponent, SingleFormFieldComponent, FormFieldsGroupComponent, FormFieldEditorComponent],
@@ -25,6 +26,7 @@ import { FormService } from './services/form.service';
   exports: [FormComponent],
   providers: [
     FormService,
+    FieldEditorRegistryService,
   ]
 })
 export class AngularD2FormsModule {

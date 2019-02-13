@@ -24,6 +24,12 @@
       ],
       "@vividcode/angular-d2-forms/*": [
         "dist/angular-d2-forms/*"
+      ],
+      "@vividcode/angular-d2-forms-material": [
+        "dist/angular-d2-forms-material"
+      ],
+      "@vividcode/angular-d2-forms-material/*": [
+        "dist/angular-d2-forms-material/*"
       ]
     }
   }

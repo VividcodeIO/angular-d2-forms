@@ -1,7 +1,6 @@
-import { TemplateRef } from '@angular/core';
 import { ComponentType } from '@angular/cdk/portal';
 import uuid from 'uuid/v1';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 
 export abstract class FormField<T> {
 
@@ -53,6 +52,10 @@ export abstract class FormFieldConfig<T> {
 
   get formControl(): AbstractControl {
     return this.formGroup.get(this.fieldName);
+  }
+
+  get label(): string {
+    return this.formField.label || this.formField.name;
   }
 }
 
