@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@vividcode/angular-d2-forms": [
+        "dist/angular-d2-forms"
+      ],
+      "@vividcode/angular-d2-forms/*": [
+        "dist/angular-d2-forms/*"
+      ]
+    }
   }
 }

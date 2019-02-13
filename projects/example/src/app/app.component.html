@@ -1,0 +1,5 @@
+<div *ngIf="form">
+  <ad2forms-form [formDescriptor]="form" [initValue]="initValue"></ad2forms-form>
+  <button (click)="save()">Save</button>
+</div>
+<router-outlet></router-outlet>
