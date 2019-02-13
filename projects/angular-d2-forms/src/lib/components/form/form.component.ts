@@ -26,7 +26,7 @@ export class FormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formConfig = this.formBuilderService.build(this.formDescriptor);
     this.formGroup = this.formConfig.formGroup;
-    this.formGroup.setValue(this.initValue);
+    this.formGroup.patchValue(this.initValue);
 
     this.store.dispatch(new InitAction({
       descriptor: this.formDescriptor,

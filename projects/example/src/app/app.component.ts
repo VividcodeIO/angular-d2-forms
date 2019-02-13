@@ -18,12 +18,16 @@ export class AppComponent implements OnInit {
     this.form = new FormDescriptor('simple', [
       new SingleFormField('name', 'string'),
       new SingleFormField('vip', 'boolean'),
+      new SingleFormField('alias', 'UserAlias'),
       new FormFieldsGroup('address', [
         new SingleFormField('street', 'string'),
       ]),
     ], 'simple');
     this.initValue = {
       name: 'alex',
+      alias: [
+        'a', 'b', 'c'
+      ],
       vip: true,
       address: {
         street: 'test',

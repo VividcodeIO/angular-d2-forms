@@ -1,17 +1,26 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AngularD2FormsModule } from '@vividcode/angular-d2-forms';
+import { AngularD2FormsModule, FieldEditorRegistryService } from '@vividcode/angular-d2-forms';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AngularD2FormsMaterialModule } from '@vividcode/angular-d2-forms-material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormEditorUserAliasComponent } from './components/form-editor-user-alias/form-editor-user-alias.component';
+
+export function registerFormEditors(service: FieldEditorRegistryService) {
+  const func = () => {
+    service.registerField('alias', 'UserAlias', FormEditorUserAliasComponent);
+  };
+  return func;
+}
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FormEditorUserAliasComponent,
   ],
   imports: [
     BrowserModule,
@@ -24,7 +33,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       name: 'NgRx DevTools',
     }),
   ],
-  providers: [],
+  entryComponents: [
+    FormEditorUserAliasComponent
+  ],
+  providers: [
+    {provide: APP_INITIALIZER, useFactory: registerFormEditors, deps: [FieldEditorRegistryService], multi: true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

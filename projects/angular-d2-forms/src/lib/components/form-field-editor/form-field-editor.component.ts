@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { FormFieldConfig } from '../../form';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'ad2forms-form-field-editor',
@@ -9,10 +7,8 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./form-field-editor.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormFieldEditorComponent<T> implements OnInit, OnDestroy {
+export class FormFieldEditorComponent<T> implements OnInit {
   @Input() formFieldConfig: FormFieldConfig<T>;
-
-  private _subscription: Subscription;
 
   constructor() {
   }
@@ -26,18 +22,11 @@ export class FormFieldEditorComponent<T> implements OnInit, OnDestroy {
     });
   }
 
-  protected save() {}
-
-  ngOnInit(): void {
-    this._subscription = this.formFieldConfig.formControl.valueChanges.pipe(
-      take(1),
-    ).subscribe(value => this.onInitialValueSet(value));
+  protected save() {
   }
 
-  ngOnDestroy(): void {
-    if (this._subscription) {
-      this._subscription.unsubscribe();
-    }
+  ngOnInit(): void {
+    this.onInitialValueSet(this.formFieldConfig.formControl.value);
   }
 
 

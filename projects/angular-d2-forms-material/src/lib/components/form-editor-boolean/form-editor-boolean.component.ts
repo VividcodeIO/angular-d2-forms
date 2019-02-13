@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
 
 @Component({
@@ -6,13 +6,10 @@ import { FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
   templateUrl: './form-editor-boolean.component.html',
   styleUrls: ['./form-editor-boolean.component.css']
 })
-export class FormEditorBooleanComponent extends FormFieldEditorComponent<boolean> implements OnInit {
+export class FormEditorBooleanComponent extends FormFieldEditorComponent<boolean> {
 
   constructor() {
     super();
-  }
-
-  ngOnInit() {
   }
 
 }
