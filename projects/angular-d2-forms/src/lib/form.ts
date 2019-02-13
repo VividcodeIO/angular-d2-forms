@@ -4,7 +4,7 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 
 export abstract class FormField<T> {
 
-  protected constructor(readonly name: string, public readonly label?: string, public readonly defaultValue?: T) {
+  protected constructor(readonly name: string, public readonly label?: string, public readonly disabled?: boolean) {
   }
 
   abstract isGroup(): boolean;
@@ -12,8 +12,8 @@ export abstract class FormField<T> {
 
 export class SingleFormField<T> extends FormField<T> {
 
-  constructor(name: string, public type: string, label?: string) {
-    super(name, label);
+  constructor(name: string, public type: string, label?: string, disabled?: boolean) {
+    super(name, label, disabled);
   }
 
   isGroup(): boolean {
@@ -56,6 +56,10 @@ export abstract class FormFieldConfig<T> {
 
   get label(): string {
     return this.formField.label || this.formField.name;
+  }
+
+  get disabled(): boolean {
+    return !!this.formField.disabled;
   }
 }
 

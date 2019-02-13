@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormDescriptor('simple', [
-      new SingleFormField('name', 'string'),
+      new SingleFormField('name', 'string', 'Name', true),
       new SingleFormField('vip', 'boolean'),
       new SingleFormField('alias', 'UserAlias'),
       new FormFieldsGroup('address', [

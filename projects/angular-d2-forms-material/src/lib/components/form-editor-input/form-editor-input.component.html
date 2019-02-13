@@ -1,5 +1,5 @@
 <div [formGroup]="formFieldConfig.formGroup">
   <mat-form-field>
-    <input matInput  [formControlName]="formFieldConfig.fieldName">
+    <input matInput [formControlName]="formFieldConfig.fieldName" [disabled]="formFieldConfig.disabled">
   </mat-form-field>
 </div>

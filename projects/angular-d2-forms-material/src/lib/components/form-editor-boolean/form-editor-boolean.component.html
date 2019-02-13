@@ -1,5 +1,5 @@
 <div [formGroup]="formFieldConfig.formGroup">
-  <mat-checkbox [formControlName]="formFieldConfig.fieldName">
+  <mat-checkbox [formControlName]="formFieldConfig.fieldName" [disabled]="formFieldConfig.disabled">
     {{formFieldConfig.label}}
   </mat-checkbox>
 </div>

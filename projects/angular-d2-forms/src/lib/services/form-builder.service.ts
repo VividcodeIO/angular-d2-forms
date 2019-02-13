@@ -28,7 +28,10 @@ export class FormBuilderService {
 
   private resolveField<T>(field: FormField<T>, formGroup: FormGroup): FormFieldConfig<T> {
     if (!field.isGroup()) {
-      formGroup.addControl(field.name, this.fb.control(null));
+      formGroup.addControl(field.name, this.fb.control({
+        value: null,
+        disabled: field.disabled,
+      }));
       return new SingleFormFieldConfig(field as SingleFormField<T>,
         this.fieldEditorResolver.resolve(field as SingleFormField<T>), formGroup);
     } else if (field instanceof FormFieldsGroup) {
