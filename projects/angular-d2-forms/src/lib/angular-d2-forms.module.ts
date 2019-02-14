@@ -11,6 +11,8 @@ import { StoreModule } from '@ngrx/store';
 import { reducer } from './store/state';
 import { FormService } from './services/form.service';
 import { FieldEditorRegistryService } from './services/field-editor-registry.service';
+import { EffectsModule } from '@ngrx/effects';
+import { FormEffects } from './store/effects';
 
 @NgModule({
   declarations: [FormComponent, FieldBasicInputComponent, SingleFormFieldComponent, FormFieldsGroupComponent, FormFieldEditorComponent],
@@ -19,6 +21,7 @@ import { FieldEditorRegistryService } from './services/field-editor-registry.ser
     ReactiveFormsModule,
     PortalModule,
     StoreModule.forFeature('ad2forms', reducer),
+    EffectsModule.forFeature([FormEffects]),
   ],
   entryComponents: [
     FieldBasicInputComponent,

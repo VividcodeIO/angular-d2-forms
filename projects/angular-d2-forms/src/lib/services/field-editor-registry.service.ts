@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SingleFormField } from '../form';
+import { FormField } from '../form';
 import { FieldBasicInputComponent } from '../components/field-basic-input/field-basic-input.component';
 import { ComponentType } from '@angular/cdk/portal';
 
@@ -29,7 +29,7 @@ export class FieldEditorRegistryService {
     return `${formId || ''}-${fieldName || ''}-${type || ''}`;
   }
 
-  find(formField: SingleFormField<any>, formId?: string): ComponentType<any> {
+  find(formField: FormField<any>, formId?: string): ComponentType<any> {
     return this._editors.get(this.generateKey(formField.type, formField.name, formId)) ||
       this._editors.get(this.generateKey(formField.type, formField.name, null)) ||
       this._editors.get(this.generateKey(formField.type, null, null)) ||

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormDescriptor, SingleFormField, FormFieldsGroup, FormService } from '@vividcode/angular-d2-forms';
+import { FormDescriptor, FormService, FormTransformation, ToggleEnabledStateFormTransformation } from '@vividcode/angular-d2-forms';
 
 @Component({
   selector: 'app-root',
@@ -9,30 +9,46 @@ import { FormDescriptor, SingleFormField, FormFieldsGroup, FormService } from '@
 export class AppComponent implements OnInit {
   form: FormDescriptor<any>;
   initValue: any;
+  transformations: FormTransformation<any>[];
 
   constructor(private formService: FormService) {
 
   }
 
   ngOnInit(): void {
-    this.form = new FormDescriptor('simple', [
-      new SingleFormField('name', 'string', 'Name', true),
-      new SingleFormField('vip', 'boolean'),
-      new SingleFormField('alias', 'UserAlias'),
-      new FormFieldsGroup('address', [
-        new SingleFormField('street', 'string'),
-      ]),
-    ], 'simple');
+    this.form = {
+      id: 'simple',
+      name: 'simple',
+      fields: [{
+        name: 'name',
+        type: 'string',
+      }, {
+        name: 'vip',
+        type: 'boolean',
+      }, {
+        name: 'alias',
+        type: 'UserAlias',
+      }, {
+        name: 'address',
+        fields: [{
+          name: 'street',
+          type: 'string',
+        }],
+      }],
+    };
     this.initValue = {
       name: 'alex',
       alias: [
         'a', 'b', 'c'
       ],
-      vip: true,
+      vip: false,
       address: {
         street: 'test',
       },
     };
+    this.transformations = [
+      new ToggleEnabledStateFormTransformation<any>('vip', 'name'),
+    ];
   }
 
   save() {

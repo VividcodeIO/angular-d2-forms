@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SingleFormField } from '../form';
+import { FormField } from '../form';
 import { FieldEditorRegistryService } from './field-editor-registry.service';
 import { ComponentType } from '@angular/cdk/portal';
 
@@ -11,7 +11,7 @@ export class FieldEditorResolverService {
   constructor(private fieldEditorRegistryService: FieldEditorRegistryService) {
   }
 
-  resolve(formField: SingleFormField<any>): ComponentType<any> {
+  resolve(formField: FormField<any>): ComponentType<any> {
     return this.fieldEditorRegistryService.find(formField);
   }
 }

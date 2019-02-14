@@ -1,40 +1,75 @@
 import { ComponentType } from '@angular/cdk/portal';
-import uuid from 'uuid/v1';
 import { AbstractControl, FormGroup } from '@angular/forms';
+import get from 'lodash.get';
+import isEqual from 'lodash.isequal';
+import clone from 'lodash.clone';
 
-export abstract class FormField<T> {
-
-  protected constructor(readonly name: string, public readonly label?: string, public readonly disabled?: boolean) {
-  }
-
-  abstract isGroup(): boolean;
+export interface FormField<T> {
+  name: string;
+  label?: string;
+  type?: string;
+  disabled?: boolean;
+  fields?: FormField<any>[];
 }
 
-export class SingleFormField<T> extends FormField<T> {
+export interface FormDescriptor<T> extends FormField<T> {
+  id: string;
+}
 
-  constructor(name: string, public type: string, label?: string, disabled?: boolean) {
-    super(name, label, disabled);
+export function isFormFieldGroup(formField: FormField<any>) {
+  return formField && formField.fields && formField.fields.length > 0;
+}
+
+export interface FormState<T> {
+  descriptor: FormDescriptor<T>;
+  value: T;
+}
+
+export abstract class FormTransformation<T> {
+  abstract transform(formState: FormState<T>): FormState<T>;
+
+  protected getFieldValue(formState: FormState<T>, fieldName: string) {
+    return get(formState.value, fieldName);
   }
 
-  isGroup(): boolean {
-    return false;
+  protected findFieldByName(formDescriptor: FormDescriptor<T>, fieldName: string) {
+    const fields = fieldName.split('.');
+    let formField: FormField<any> = formDescriptor;
+    let name;
+    while (!!(name = fields.shift())) {
+      if (formField.fields) {
+        for (let i = 0; i < formField.fields.length; i++) {
+          const field = formField.fields[i];
+          if (isEqual(name, field.name)) {
+            if (fields.length === 0) {
+              return field;
+            } else {
+              formField = field;
+              break;
+            }
+          }
+        }
+      }
+    }
   }
 }
 
-export class FormFieldsGroup<T> extends FormField<T> {
-  constructor(name: string, public fields: FormField<any>[] = [], label?: string) {
-    super(name, label);
+export class ToggleEnabledStateFormTransformation<T> extends FormTransformation<T> {
+  constructor(public readonly sourceFieldName: string, public readonly targetFieldName: string) {
+    super();
   }
 
-  isGroup(): boolean {
-    return true;
-  }
-}
-
-export class FormDescriptor<T> extends FormFieldsGroup<T> {
-
-  constructor(name: string, fields: FormField<any>[] = [], public readonly id: string = uuid()) {
-    super(name, fields);
+  transform(formState: FormState<T>): FormState<T> {
+    const fieldValue = this.getFieldValue(formState, this.sourceFieldName);
+    const descriptor = clone(formState.descriptor);
+    const field = this.findFieldByName(descriptor, this.targetFieldName);
+    if (field) {
+      field.disabled = !fieldValue;
+    }
+    return {
+      descriptor,
+      value: formState.value,
+    };
   }
 }
 
@@ -47,7 +82,7 @@ export abstract class FormFieldConfig<T> {
   }
 
   get isGroup(): boolean {
-    return this.formField.isGroup();
+    return isFormFieldGroup(this.formField);
   }
 
   get formControl(): AbstractControl {
@@ -65,7 +100,7 @@ export abstract class FormFieldConfig<T> {
 
 export class SingleFormFieldConfig<T, C> extends FormFieldConfig<T> {
 
-  constructor(formField: SingleFormField<T>, public readonly componentType: ComponentType<T>, formGroup: FormGroup) {
+  constructor(formField: FormField<T>, public readonly componentType: ComponentType<T>, formGroup: FormGroup) {
     super(formField, formGroup);
   }
 
@@ -73,8 +108,8 @@ export class SingleFormFieldConfig<T, C> extends FormFieldConfig<T> {
 
 export class FormFieldsGroupConfig<T> extends FormFieldConfig<T> {
 
-  constructor(fieldsGroup: FormFieldsGroup<T>, public fields: FormFieldConfig<any>[] = [], formGroup: FormGroup) {
-    super(fieldsGroup, formGroup);
+  constructor(formField: FormField<T>, public fields: FormFieldConfig<any>[] = [], formGroup: FormGroup) {
+    super(formField, formGroup);
   }
 
 }

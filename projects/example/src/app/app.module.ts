@@ -9,6 +9,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AngularD2FormsMaterialModule } from '@vividcode/angular-d2-forms-material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormEditorUserAliasComponent } from './components/form-editor-user-alias/form-editor-user-alias.component';
+import { EffectsModule } from '@ngrx/effects';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
@@ -29,6 +30,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     AngularD2FormsModule,
     AngularD2FormsMaterialModule,
     StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       name: 'NgRx DevTools',
     }),

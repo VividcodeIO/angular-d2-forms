@@ -1,15 +1,11 @@
-import { FormDescriptor } from '../form';
+import { FormState } from '../form';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { FormActionTypes, InitAction, UpdateValueAction } from './action';
+import { FormActionTypes, UpdateStateAction } from './action';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 
-export interface FormState {
-  descriptor: FormDescriptor<any>;
-  value: any;
-}
+export type State = EntityState<FormState<any>>;
 
-export type State = EntityState<FormState>;
-
-const stateAdapter = createEntityAdapter<FormState>({
+const stateAdapter = createEntityAdapter<FormState<any>>({
   selectId: model => model.descriptor.id,
   sortComparer: false,
 });
@@ -18,22 +14,21 @@ const initialState = stateAdapter.getInitialState();
 
 export function reducer(state: State = initialState, action) {
   switch (action.type) {
-    case FormActionTypes.INIT:
-      return stateAdapter.addOne((action as InitAction).payload, state);
-    case FormActionTypes.UPDATE_VALUE:
-      const {formId, value} = (action as UpdateValueAction).payload;
-      const config = state.entities[formId];
-      if (config) {
-        return stateAdapter.updateOne({
-          id: formId,
-          changes: {
-            value,
-          }
-        }, state);
-      }
-      break;
+    case FormActionTypes.UPDATE_STATE:
+      return stateAdapter.upsertOne((action as UpdateStateAction).payload, state);
     default:
       return state;
   }
-  return state;
 }
+
+export const getFormState = createFeatureSelector('ad2forms');
+
+export const getFormStates = createSelector(
+  getFormState,
+  stateAdapter.getSelectors().selectEntities,
+);
+
+export const selectFormState = (formId: string) => createSelector(
+  getFormStates,
+  (entities) => entities[formId],
+);

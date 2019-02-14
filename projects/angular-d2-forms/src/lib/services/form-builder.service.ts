@@ -4,9 +4,8 @@ import {
   FormDescriptor,
   FormField,
   FormFieldConfig,
-  FormFieldsGroup,
   FormFieldsGroupConfig,
-  SingleFormField,
+  isFormFieldGroup,
   SingleFormFieldConfig
 } from '../form';
 import { FieldEditorResolverService } from './field-editor-resolver.service';
@@ -27,14 +26,14 @@ export class FormBuilderService {
   }
 
   private resolveField<T>(field: FormField<T>, formGroup: FormGroup): FormFieldConfig<T> {
-    if (!field.isGroup()) {
+    if (!isFormFieldGroup(field)) {
       formGroup.addControl(field.name, this.fb.control({
         value: null,
         disabled: field.disabled,
       }));
-      return new SingleFormFieldConfig(field as SingleFormField<T>,
-        this.fieldEditorResolver.resolve(field as SingleFormField<T>), formGroup);
-    } else if (field instanceof FormFieldsGroup) {
+      return new SingleFormFieldConfig(field,
+        this.fieldEditorResolver.resolve(field), formGroup);
+    } else {
       const group = this.fb.group({});
       formGroup.addControl(field.name, group);
       return new FormFieldsGroupConfig(field, field.fields.map(childField => this.resolveField(childField, group)), group);
