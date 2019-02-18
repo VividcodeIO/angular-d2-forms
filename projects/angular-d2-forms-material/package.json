@@ -1,6 +1,18 @@
 {
   "name": "@vividcode/angular-d2-forms-material",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "author": {
+    "name": "Fu Cheng"
+  },
+  "bugs": {
+    "url": "https://github.com/alexcheng1982/angular-d2-forms-material/issues"
+  },
+  "homepage": "https://github.com/alexcheng1982/angular-d2-forms-material#readme",
+  "keywords": [
+    "Angular",
+    "Form",
+    "Material"
+  ],
   "peerDependencies": {
     "@angular/animations": "^7.1.4",
     "@angular/common": "^7.1.0",
@@ -8,5 +20,9 @@
     "@angular/cdk": "^7.3.2",
     "@angular/material": "^7.3.2",
     "@vividcode/angular-d2-forms": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexcheng1982/angular-d2-forms-material.git"
   }
 }
