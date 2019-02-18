@@ -29,6 +29,10 @@ export class AppComponent implements OnInit {
         name: 'alias',
         type: 'UserAlias',
       }, {
+        name: 'type',
+        type: 'select',
+        data: ['a', 'b', 'c'],
+      }, {
         name: 'address',
         fields: [{
           name: 'street',

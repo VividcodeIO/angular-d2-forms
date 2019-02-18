@@ -8,6 +8,7 @@ export interface FormField<T> {
   label?: string;
   type?: string;
   disabled?: boolean;
+  data?: any;
   fields?: FormField<any>[];
 }
 
@@ -90,6 +91,10 @@ export abstract class FormFieldConfig<T> {
 
   get disabled(): boolean {
     return !!this.formField.disabled;
+  }
+
+  get data(): any {
+    return this.formField.data;
   }
 }
 
