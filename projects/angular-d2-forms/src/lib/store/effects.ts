@@ -5,8 +5,10 @@ import { Observable } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { FormActionTypes, InitAction, UpdateStateAction } from './action';
 import { map, withLatestFrom } from 'rxjs/operators';
-import { selectFormState } from './state';
+import { selectDescriptor } from './state';
 import { FormState } from '../form';
+import isEqual from 'lodash.isequal';
+import cloneDeep from 'lodash.clonedeep';
 
 @Injectable()
 export class FormEffects {
@@ -20,7 +22,10 @@ export class FormEffects {
     ofType(FormActionTypes.INIT),
     map((action: InitAction) => {
       const state = this.applyTransformations(action.payload);
-      return new UpdateStateAction(state);
+      return new UpdateStateAction({
+        ...state,
+        descriptorChanged: true,
+      });
     }),
   );
 
@@ -29,20 +34,23 @@ export class FormEffects {
     ofType(FormActionTypes.UPDATE_VALUE),
     withLatestFrom(this.store),
     map(([action, store]) => {
-      const {formId, value} = (action as any).payload;
-      const config = selectFormState(formId)(store);
-      const state = this.applyTransformations({
-        descriptor: config.descriptor,
-        value,
-      });
-      return new UpdateStateAction(state);
-    }),
+        const {formId, value} = (action as any).payload;
+        const descriptor = selectDescriptor(formId)(store);
+        const state = this.applyTransformations({
+          descriptor,
+          value,
+        });
+        return new UpdateStateAction({
+          ...state,
+          descriptorChanged: !isEqual(descriptor, state.descriptor),
+        });
+    })
   );
 
   private applyTransformations<T>(formState: FormState<T>): FormState<T> {
     const formId = formState.descriptor.id;
     const transformations = this.formTransformationService.get(formId) || [];
-    let state = formState;
+    let state = cloneDeep(formState);
     transformations.forEach((transformation) => {
       state = transformation.transform(state);
     });

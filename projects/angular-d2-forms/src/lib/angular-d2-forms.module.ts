@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PortalModule } from '@angular/cdk/portal';
 import { FormFieldEditorComponent } from './components/form-field-editor/form-field-editor.component';
 import { StoreModule } from '@ngrx/store';
-import { reducer } from './store/state';
+import { featureName, reducer } from './store/state';
 import { FormService } from './services/form.service';
 import { FieldEditorRegistryService } from './services/field-editor-registry.service';
 import { EffectsModule } from '@ngrx/effects';
@@ -20,7 +20,7 @@ import { FormEffects } from './store/effects';
     CommonModule,
     ReactiveFormsModule,
     PortalModule,
-    StoreModule.forFeature('ad2forms', reducer),
+    StoreModule.forFeature(featureName, reducer),
     EffectsModule.forFeature([FormEffects]),
   ],
   entryComponents: [

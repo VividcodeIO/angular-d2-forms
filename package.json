@@ -27,6 +27,7 @@
     "@ngrx/store-devtools": "^7.2.0",
     "core-js": "^2.5.4",
     "lodash.clone": "^4.5.0",
+    "lodash.clonedeep": "^4.5.0",
     "lodash.concat": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",

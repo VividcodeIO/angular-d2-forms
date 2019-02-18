@@ -4,9 +4,9 @@ import { FormBuilderService } from '../../services/form-builder.service';
 import { Store } from '@ngrx/store';
 import { InitAction, UpdateValueAction } from '../../store/action';
 import { FormService } from '../../services/form.service';
-import { selectFormState } from '../../store/state';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { selectState } from '../../store/state';
+import { filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { FormTransformationService } from '../../services/form-transformation.service';
 
 @Component({
@@ -18,7 +18,9 @@ export class FormComponent implements OnInit, OnDestroy {
   @Input() formDescriptor: FormDescriptor<any>;
   @Input() initValue: any;
   @Input() transformations: FormTransformation<any>[];
-  formConfig$: Observable<FormConfig<any>>;
+  formConfig: FormConfig<any>;
+  _subscription: Subscription;
+  _valueChangeSubscription: Subscription;
 
   constructor(private formBuilderService: FormBuilderService,
               private formTransformationService: FormTransformationService,
@@ -32,20 +34,24 @@ export class FormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.formTransformationService.set(this.formId, this.transformations);
-    this.formConfig$ = this.store.select(selectFormState(this.formId)).pipe(
-      map(state => {
+
+    this._subscription = this.store.select(selectState(this.formId)).pipe(
+      filter(value => !!value),
+    ).subscribe(state => {
+      if (state.descriptorChanged) {
+        this.clearValueChangeSubscription();
         const formConfig = this.formBuilderService.build(state.descriptor);
-        formConfig.formGroup.valueChanges.subscribe(value => this.store.dispatch(new UpdateValueAction({
+        this._valueChangeSubscription = formConfig.formGroup.valueChanges.subscribe(value => this.store.dispatch(new UpdateValueAction({
           formId: this.formId,
           value,
         })));
-        formConfig.formGroup.patchValue(state.value, {
-          emitEvent: false,
-        });
         this.formService.addForm(this.formId, formConfig.formGroup);
-        return formConfig;
-      })
-    );
+        this.formConfig = formConfig;
+      }
+      this.formConfig.formGroup.patchValue(state.value, {
+        emitEvent: false,
+      });
+    });
 
     this.store.dispatch(new InitAction({
       descriptor: this.formDescriptor,
@@ -55,6 +61,16 @@ export class FormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.formService.removeForm(this.formDescriptor.id);
+    this.clearValueChangeSubscription();
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 
+  private clearValueChangeSubscription() {
+    if (this._valueChangeSubscription) {
+      this._valueChangeSubscription.unsubscribe();
+      this._valueChangeSubscription = undefined;
+    }
+  }
 }

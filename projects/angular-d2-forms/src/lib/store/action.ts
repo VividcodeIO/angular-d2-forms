@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { FormState } from '../form';
+import { FormStateUpdate } from './state';
 
 export enum FormActionTypes {
   INIT = '[Form] Init',
@@ -7,7 +8,7 @@ export enum FormActionTypes {
   UPDATE_STATE = '[Form] Update State',
 }
 
-export interface UpdateActionPayload {
+export interface UpdateValuePayload {
   formId: string;
   value: any;
 }
@@ -22,13 +23,12 @@ export class InitAction implements Action {
 export class UpdateValueAction implements Action {
   public readonly type: string = FormActionTypes.UPDATE_VALUE;
 
-  constructor(public payload: UpdateActionPayload) {
+  constructor(public payload: UpdateValuePayload) {
   }
 }
-
 export class UpdateStateAction implements Action {
   public readonly type: string = FormActionTypes.UPDATE_STATE;
 
-  constructor(public payload: FormState<any>) {
+  constructor(public payload: FormStateUpdate<any>) {
   }
 }

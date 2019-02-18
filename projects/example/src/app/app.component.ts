@@ -34,6 +34,9 @@ export class AppComponent implements OnInit {
           name: 'street',
           type: 'string',
         }],
+      }, {
+        name: 'description',
+        type: 'multiline-string',
       }],
     };
     this.initValue = {

@@ -2,7 +2,6 @@ import { ComponentType } from '@angular/cdk/portal';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import get from 'lodash.get';
 import isEqual from 'lodash.isequal';
-import clone from 'lodash.clone';
 
 export interface FormField<T> {
   name: string;
@@ -61,15 +60,11 @@ export class ToggleEnabledStateFormTransformation<T> extends FormTransformation<
 
   transform(formState: FormState<T>): FormState<T> {
     const fieldValue = this.getFieldValue(formState, this.sourceFieldName);
-    const descriptor = clone(formState.descriptor);
-    const field = this.findFieldByName(descriptor, this.targetFieldName);
+    const field = this.findFieldByName(formState.descriptor, this.targetFieldName);
     if (field) {
       field.disabled = !fieldValue;
     }
-    return {
-      descriptor,
-      value: formState.value,
-    };
+    return formState;
   }
 }
 
