@@ -77,6 +77,10 @@ export abstract class FormFieldConfig<T> {
     return this.formField.name;
   }
 
+  get fieldType(): string {
+    return this.formField.type;
+  }
+
   get isGroup(): boolean {
     return isFormFieldGroup(this.formField);
   }
@@ -124,3 +128,10 @@ export class FormConfig<T> extends FormFieldsGroupConfig<T> {
   }
 }
 
+export type FormFieldMatcher = (type: string, name?: string, formId?: string) => boolean;
+
+export interface FormComponentConfig<T> {
+  descriptor: FormDescriptor<T>;
+  initialValue?: T;
+  transformations?: FormTransformation<T>[];
+}

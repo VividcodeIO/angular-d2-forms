@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormConfig, FormDescriptor, FormTransformation } from '../../form';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { FormComponentConfig, FormConfig } from '../../form';
 import { FormBuilderService } from '../../services/form-builder.service';
 import { Store } from '@ngrx/store';
 import { InitAction, UpdateValueAction } from '../../store/action';
@@ -14,10 +14,8 @@ import { FormTransformationService } from '../../services/form-transformation.se
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css']
 })
-export class FormComponent implements OnInit, OnDestroy {
-  @Input() formDescriptor: FormDescriptor<any>;
-  @Input() initValue: any;
-  @Input() transformations: FormTransformation<any>[];
+export class FormComponent implements OnChanges, OnDestroy {
+  @Input() config: FormComponentConfig<any>;
   formConfig: FormConfig<any>;
   _subscription: Subscription;
   _valueChangeSubscription: Subscription;
@@ -29,41 +27,54 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   get formId(): string {
-    return this.formDescriptor.id;
+    return this.config.descriptor.id;
   }
 
-  ngOnInit() {
-    this.formTransformationService.set(this.formId, this.transformations);
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes.config.currentValue) {
+      return;
+    }
+    this.reset();
+    const config: FormComponentConfig<any> = changes.config.currentValue;
+    const formId = config.descriptor.id;
+    this.formTransformationService.set(formId, config.transformations);
 
-    this._subscription = this.store.select(selectState(this.formId)).pipe(
+    this.store.dispatch(new InitAction({
+      descriptor: config.descriptor,
+      value: config.initialValue,
+    }));
+
+    this._subscription = this.store.select(selectState(formId)).pipe(
       filter(value => !!value),
     ).subscribe(state => {
       if (state.descriptorChanged) {
         this.clearValueChangeSubscription();
         const formConfig = this.formBuilderService.build(state.descriptor);
         this._valueChangeSubscription = formConfig.formGroup.valueChanges.subscribe(value => this.store.dispatch(new UpdateValueAction({
-          formId: this.formId,
+          formId,
           value,
         })));
-        this.formService.addForm(this.formId, formConfig.formGroup);
+        this.formService.addForm(formId, formConfig.formGroup);
         this.formConfig = formConfig;
       }
-      this.formConfig.formGroup.patchValue(state.value, {
-        emitEvent: false,
-      });
+      if (this.formConfig) {
+        this.formConfig.formGroup.patchValue(state.value, {
+          emitEvent: false,
+        });
+      }
     });
-
-    this.store.dispatch(new InitAction({
-      descriptor: this.formDescriptor,
-      value: this.initValue,
-    }));
   }
 
   ngOnDestroy(): void {
-    this.formService.removeForm(this.formDescriptor.id);
+    this.formService.removeForm(this.formId);
+    this.reset();
+  }
+
+  private reset() {
     this.clearValueChangeSubscription();
     if (this._subscription) {
       this._subscription.unsubscribe();
+      this._subscription = undefined;
     }
   }
 

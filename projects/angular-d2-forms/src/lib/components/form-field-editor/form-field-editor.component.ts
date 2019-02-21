@@ -10,10 +10,11 @@ import { FormFieldConfig } from '../../form';
 export class FormFieldEditorComponent<T> implements OnInit {
   @Input() formFieldConfig: FormFieldConfig<T>;
 
-  constructor() {
+  protected onInitialValueSet(value: T) {
   }
 
-  protected onInitialValueSet(value: T) {
+  protected getValue(): T {
+    return this.formFieldConfig.formControl.value;
   }
 
   protected setValue(value: T) {

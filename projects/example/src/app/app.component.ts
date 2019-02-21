@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormDescriptor, FormService, FormTransformation, ToggleEnabledStateFormTransformation } from '@vividcode/angular-d2-forms';
+import { FormComponentConfig, FormService, ToggleEnabledStateFormTransformation } from '@vividcode/angular-d2-forms';
 
 @Component({
   selector: 'app-root',
@@ -7,16 +7,14 @@ import { FormDescriptor, FormService, FormTransformation, ToggleEnabledStateForm
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  form: FormDescriptor<any>;
-  initValue: any;
-  transformations: FormTransformation<any>[];
+  config: FormComponentConfig<any>;
 
   constructor(private formService: FormService) {
 
   }
 
   ngOnInit(): void {
-    this.form = {
+    const form = {
       id: 'simple',
       name: 'simple',
       fields: [{
@@ -43,7 +41,7 @@ export class AppComponent implements OnInit {
         type: 'multiline-string',
       }],
     };
-    this.initValue = {
+    const initValue = {
       name: 'alex',
       alias: [
         'a', 'b', 'c'
@@ -53,10 +51,16 @@ export class AppComponent implements OnInit {
         street: 'test',
       },
     };
-    this.transformations = [
+    const transformations = [
       new ToggleEnabledStateFormTransformation<any>('vip', 'name'),
     ];
+    this.config = {
+      descriptor: form,
+      initialValue: initValue,
+      transformations,
+    };
   }
+
 
   save() {
     this.formService.save('simple');
