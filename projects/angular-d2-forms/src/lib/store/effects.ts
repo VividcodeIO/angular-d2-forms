@@ -25,6 +25,7 @@ export class FormEffects {
       return new UpdateStateAction({
         ...state,
         descriptorChanged: true,
+        valueChanged: false,
       });
     }),
   );
@@ -43,6 +44,7 @@ export class FormEffects {
         return new UpdateStateAction({
           ...state,
           descriptorChanged: !isEqual(descriptor, state.descriptor),
+          valueChanged: !isEqual(value, state.value),
         });
     })
   );

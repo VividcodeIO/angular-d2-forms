@@ -5,6 +5,7 @@ import { FormState } from '../form';
 
 export interface FormStateUpdate<T> extends FormState<T> {
   descriptorChanged: boolean;
+  valueChanged: boolean;
 }
 
 export type State<T> = EntityState<FormStateUpdate<T>>;

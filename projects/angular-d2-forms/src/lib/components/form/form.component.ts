@@ -57,7 +57,7 @@ export class FormComponent implements OnChanges, OnDestroy {
         this.formService.addForm(formId, formConfig.formGroup);
         this.formConfig = formConfig;
       }
-      if (this.formConfig) {
+      if ((state.valueChanged || state.descriptorChanged) && this.formConfig) {
         this.formConfig.formGroup.patchValue(state.value, {
           emitEvent: false,
         });
