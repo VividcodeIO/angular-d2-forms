@@ -2,4 +2,5 @@
   <mat-checkbox [formControlName]="formFieldConfig.fieldName">
     <mat-label>{{formFieldConfig.label}}</mat-label>
   </mat-checkbox>
+  <mat-error *ngIf="hasErrors">{{errors}}</mat-error>
 </div>

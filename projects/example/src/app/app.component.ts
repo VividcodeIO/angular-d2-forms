@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormComponentConfig, FormService, ToggleEnabledStateFormTransformation } from '@vividcode/angular-d2-forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormComponentConfig, FormComponent, FormService, ToggleEnabledStateFormTransformation, FormDescriptor, RequiredValidator, minLengthValidator } from '@vividcode/angular-d2-forms';
 
 @Component({
   selector: 'app-root',
@@ -8,18 +8,20 @@ import { FormComponentConfig, FormService, ToggleEnabledStateFormTransformation 
 })
 export class AppComponent implements OnInit {
   config: FormComponentConfig<any>;
+  @ViewChild('form') form: FormComponent;
 
   constructor(private formService: FormService) {
 
   }
 
   ngOnInit(): void {
-    const form = {
+    const form: FormDescriptor<any> = {
       id: 'simple',
       name: 'simple',
       fields: [{
         name: 'name',
         type: 'string',
+        validators: [RequiredValidator, minLengthValidator(6)],
       }, {
         name: 'vip',
         type: 'boolean',
@@ -27,9 +29,20 @@ export class AppComponent implements OnInit {
         name: 'alias',
         type: 'UserAlias',
       }, {
-        name: 'type',
-        type: 'select',
+        name: 'select1',
+        type: 'cas-select',
         data: ['a', 'b', 'c'],
+        validators: [RequiredValidator],
+      }, {
+        name: 'select2',
+        type: 'cas-select',
+        data: ['d', 'e', 'f'],
+        depFields: ['select1'],
+      }, {
+        name: 'select3',
+        type: 'cas-select',
+        data: ['g', 'h', 'i'],
+        depFields: ['select2'],
       }, {
         name: 'address',
         fields: [{
@@ -63,7 +76,7 @@ export class AppComponent implements OnInit {
 
 
   save() {
-    this.formService.save('simple');
-    console.log(this.formService.getValue('simple'));
+    this.form.save();
+    console.log(this.form.value);
   }
 }

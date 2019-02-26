@@ -10,10 +10,14 @@ import { AngularD2FormsMaterialModule } from '@vividcode/angular-d2-forms-materi
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormEditorUserAliasComponent } from './components/form-editor-user-alias/form-editor-user-alias.component';
 import { EffectsModule } from '@ngrx/effects';
+import { FormEditorCascadingSelectComponent } from './components/form-editor-cascading-select/form-editor-cascading-select.component';
+import { MatSelectModule } from '@angular/material';
+import { ReactiveFormsModule } from '@angular/forms';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
     service.registerField('alias', 'UserAlias', FormEditorUserAliasComponent);
+    service.registerGlobal('cas-select', FormEditorCascadingSelectComponent);
   };
   return func;
 }
@@ -22,10 +26,12 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
   declarations: [
     AppComponent,
     FormEditorUserAliasComponent,
+    FormEditorCascadingSelectComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     AngularD2FormsModule,
     AngularD2FormsMaterialModule,
@@ -34,9 +40,11 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     StoreDevtoolsModule.instrument({
       name: 'NgRx DevTools',
     }),
+    MatSelectModule,
   ],
   entryComponents: [
-    FormEditorUserAliasComponent
+    FormEditorUserAliasComponent,
+    FormEditorCascadingSelectComponent,
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: registerFormEditors, deps: [FieldEditorRegistryService], multi: true},

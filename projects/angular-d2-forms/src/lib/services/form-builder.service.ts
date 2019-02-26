@@ -10,6 +10,7 @@ import {
 } from '../form';
 import { FieldEditorResolverService } from './field-editor-resolver.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import get from 'lodash.get';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class FormBuilderService {
       formGroup.addControl(field.name, this.fb.control({
         value: null,
         disabled: field.disabled,
-      }));
+      }, this.getValidators(field)));
       return new SingleFormFieldConfig(field,
         this.fieldEditorResolver.resolve(field), formGroup);
     } else {
@@ -38,5 +39,9 @@ export class FormBuilderService {
       formGroup.addControl(field.name, group);
       return new FormFieldsGroupConfig(field, field.fields.map(childField => this.resolveField(childField, group)), group);
     }
+  }
+
+  private getValidators(field: FormField<any>) {
+    return get(field, 'validators', []).map(v => v.validator);
   }
 }

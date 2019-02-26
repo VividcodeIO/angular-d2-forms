@@ -14,7 +14,8 @@
       "lodash.without": "lodash.without",
       "lodash.get": "lodash.get",
       "lodash.isequal": "lodash.isequal",
-      "lodash.clonedeep": "lodash.clonedeep"
+      "lodash.clonedeep": "lodash.clonedeep",
+      "lodash.find": "lodash.find"
     }
   }
 }

@@ -1,5 +1,6 @@
 <div [formGroup]="formFieldConfig.formGroup">
   <mat-form-field>
     <input matInput type="number" [formControlName]="formFieldConfig.fieldName">
+    <mat-error *ngIf="hasErrors">{{errors}}</mat-error>
   </mat-form-field>
 </div>

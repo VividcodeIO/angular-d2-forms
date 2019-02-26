@@ -30,4 +30,8 @@ export class FieldEditorComponentService {
       this._components.get(formId).forEach(component => component.save());
     }
   }
+
+  removeForm(formId: string) {
+    this._components.delete(formId);
+  }
 }

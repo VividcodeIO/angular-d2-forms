@@ -17,10 +17,14 @@ export class FormFieldEditorComponent<T> implements OnInit {
     return this.formFieldConfig.formControl.value;
   }
 
-  protected setValue(value: T) {
+  protected setValue(value: T, emitEvent = false) {
     this.formFieldConfig.formControl.setValue(value, {
-      emitEvent: false,
+      emitEvent,
     });
+  }
+
+  protected notifyValueChanged(value: T) {
+    this.setValue(value, true);
   }
 
   protected save() {
@@ -30,5 +34,12 @@ export class FormFieldEditorComponent<T> implements OnInit {
     this.onInitialValueSet(this.formFieldConfig.formControl.value);
   }
 
+  get hasErrors(): boolean {
+    return this.errors && this.errors.length > 0;
+  }
+
+  get errors(): string[] {
+    return this.formFieldConfig.errors;
+  }
 
 }

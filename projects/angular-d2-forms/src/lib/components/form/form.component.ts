@@ -84,4 +84,20 @@ export class FormComponent implements OnChanges, OnDestroy {
       this._valueChangeSubscription = undefined;
     }
   }
+
+  get valid(): boolean {
+    return this.formConfig && this.formConfig.valid;
+  }
+
+  get invalid(): boolean {
+    return this.formConfig && this.formConfig.invalid;
+  }
+
+  get value(): any {
+    return this.formService.getValue(this.formId);
+  }
+
+  save() {
+    this.formService.save(this.formId);
+  }
 }

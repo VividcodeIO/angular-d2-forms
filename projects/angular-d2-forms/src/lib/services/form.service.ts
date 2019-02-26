@@ -17,6 +17,7 @@ export class FormService {
 
   removeForm(formId) {
     this._forms.delete(formId);
+    this.fieldEditorComponentService.removeForm(formId);
   }
 
   save(formId: string) {

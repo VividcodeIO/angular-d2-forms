@@ -1,15 +1,44 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import get from 'lodash.get';
 import isEqual from 'lodash.isequal';
+import find from 'lodash.find';
+
+function getFormDisplayName(formField: FormField<any>) {
+  return formField.label || formField.name;
+}
+
+export type ErrorMessageBuilder = (field: FormField<any>, validationResult: any, value: any) => string;
+
+export interface Validator {
+  key: string;
+  message: string | ErrorMessageBuilder;
+  validator: ValidatorFn;
+}
+
+export const RequiredValidator: Validator = {
+  key: 'required',
+  message: (field: FormField<any>) => `The value of ${getFormDisplayName(field)} is required.`,
+  validator: Validators.required,
+};
+
+export function minLengthValidator(length: number): Validator {
+  return {
+    key: 'minlength',
+    message: (field, result) => `The minimum length of ${getFormDisplayName(field)} is ${result.requiredLength}.`,
+    validator: Validators.minLength(length),
+  };
+}
 
 export interface FormField<T> {
   name: string;
   label?: string;
   type?: string;
   disabled?: boolean;
+  validators?: Validator[];
   data?: any;
   fields?: FormField<any>[];
+  depFields?: string[];
 }
 
 export interface FormDescriptor<T> extends FormField<T> {
@@ -70,7 +99,8 @@ export class ToggleEnabledStateFormTransformation<T> extends FormTransformation<
 }
 
 export abstract class FormFieldConfig<T> {
-  protected constructor(public readonly formField: FormField<T>, public readonly formGroup: FormGroup) {
+  protected constructor(public readonly formField: FormField<T>,
+                        public readonly formGroup: FormGroup) {
   }
 
   get fieldName(): string {
@@ -100,11 +130,32 @@ export abstract class FormFieldConfig<T> {
   get data(): any {
     return this.formField.data;
   }
+
+  get depValues(): any {
+    return (this.formField.depFields || []).map(field => get(this.formGroup.value, field));
+  }
+
+  get errors(): string[] {
+    const errors = this.formControl.errors;
+    if (!errors) {
+      return [];
+    }
+    return Object.keys(errors).map(key => {
+      const validator: Validator = find(this.formField.validators, ['key', key]);
+      if (typeof validator.message === 'string') {
+        return validator.message;
+      } else {
+        return validator.message(this.formField, errors[key], this.formControl.value);
+      }
+    });
+  }
 }
 
 export class SingleFormFieldConfig<T, C> extends FormFieldConfig<T> {
 
-  constructor(formField: FormField<T>, public readonly componentType: ComponentType<T>, formGroup: FormGroup) {
+  constructor(formField: FormField<T>,
+              public readonly componentType: ComponentType<T>,
+              formGroup: FormGroup) {
     super(formField, formGroup);
   }
 
@@ -112,7 +163,9 @@ export class SingleFormFieldConfig<T, C> extends FormFieldConfig<T> {
 
 export class FormFieldsGroupConfig<T> extends FormFieldConfig<T> {
 
-  constructor(formField: FormField<T>, public fields: FormFieldConfig<any>[] = [], formGroup: FormGroup) {
+  constructor(formField: FormField<T>,
+              public fields: FormFieldConfig<any>[] = [],
+              formGroup: FormGroup) {
     super(formField, formGroup);
   }
 
@@ -125,6 +178,14 @@ export class FormConfig<T> extends FormFieldsGroupConfig<T> {
 
   get id(): string {
     return (this.formField as FormDescriptor<any>).id;
+  }
+
+  get valid(): boolean {
+    return this.formGroup && this.formGroup.valid;
+  }
+
+  get invalid(): boolean {
+    return this.formGroup && this.formGroup.invalid;
   }
 }
 

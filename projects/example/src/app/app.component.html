@@ -1,5 +1,5 @@
-<div *ngIf="form">
-  <ad2forms-form [config]="config"></ad2forms-form>
-  <button (click)="save()">Save</button>
+<div>
+  <ad2forms-form [config]="config" #form></ad2forms-form>
+  <button [disabled]="form.invalid" (click)="save()">Save</button>
 </div>
 <router-outlet></router-outlet>

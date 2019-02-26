@@ -3,5 +3,6 @@
     <mat-label>{{formFieldConfig.label}}</mat-label>
     <textarea matInput [formControlName]="formFieldConfig.fieldName">
     </textarea>
+    <mat-error *ngIf="hasErrors">{{errors}}</mat-error>
   </mat-form-field>
 </div>

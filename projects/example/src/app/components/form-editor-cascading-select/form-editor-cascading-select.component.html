@@ -2,9 +2,8 @@
   <mat-form-field>
     <mat-select [placeholder]="formFieldConfig.label" [formControlName]="formFieldConfig.fieldName">
       <mat-option *ngFor="let value of formFieldConfig.data" [value]="value">
-        {{value}}
+        {{formFieldConfig.depValues}} - {{value}}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="hasErrors">{{errors}}</mat-error>
   </mat-form-field>
 </div>
