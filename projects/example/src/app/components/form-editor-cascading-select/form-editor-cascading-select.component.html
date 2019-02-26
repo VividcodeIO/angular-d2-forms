@@ -2,7 +2,7 @@
   <mat-form-field>
     <mat-select [placeholder]="formFieldConfig.label" [formControlName]="formFieldConfig.fieldName">
       <mat-option *ngFor="let value of formFieldConfig.data" [value]="value">
-        {{formFieldConfig.depValues}} - {{value}}
+        {{dependencyValues | async}} - {{value}}
       </mat-option>
     </mat-select>
   </mat-form-field>

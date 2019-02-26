@@ -38,7 +38,7 @@ export interface FormField<T> {
   validators?: Validator[];
   data?: any;
   fields?: FormField<any>[];
-  depFields?: string[];
+  dependencies?: string[];
 }
 
 export interface FormDescriptor<T> extends FormField<T> {
@@ -120,7 +120,7 @@ export abstract class FormFieldConfig<T> {
   }
 
   get label(): string {
-    return this.formField.label || this.formField.name;
+    return getFormDisplayName(this.formField);
   }
 
   get disabled(): boolean {
@@ -131,8 +131,12 @@ export abstract class FormFieldConfig<T> {
     return this.formField.data;
   }
 
+  get dependencies(): string[] {
+    return this.formField.dependencies || [];
+  }
+
   get depValues(): any {
-    return (this.formField.depFields || []).map(field => get(this.formGroup.value, field));
+    return (this.formField.dependencies || []).map(field => get(this.formGroup.value, field));
   }
 
   get errors(): string[] {

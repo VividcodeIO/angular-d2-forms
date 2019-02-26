@@ -1,7 +1,12 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, ViewChild } from '@angular/core';
 import { SingleFormFieldConfig } from '../../form';
 import { CdkPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
 import { FieldEditorComponentService } from '../../services/field-editor-component.service';
+import { Store } from '@ngrx/store';
+import { selectFields } from '../../store/state';
+import { distinctUntilChanged } from 'rxjs/operators';
+import isEqual from 'lodash.isequal';
+import { EMPTY } from 'rxjs';
 
 @Component({
   selector: 'ad2forms-single-form-field',
@@ -12,19 +17,27 @@ export class SingleFormFieldComponent implements AfterViewInit, OnDestroy {
   @Input() formId: string;
   @Input() config: SingleFormFieldConfig<any, any>;
   @ViewChild(CdkPortalOutlet) _portalOutlet: CdkPortalOutlet;
+  @HostBinding('class') classes = 'ad2forms-single-field';
 
   private _instance: any;
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
-              private fieldEditorComponentService: FieldEditorComponentService) {
+              private fieldEditorComponentService: FieldEditorComponentService,
+              private store: Store<any>) {
   }
 
   ngAfterViewInit(): void {
     const componentRef = this._portalOutlet.attachComponentPortal(new ComponentPortal<any>(this.config.componentType));
-    componentRef.instance.formFieldConfig = this.config;
-    this.fieldEditorComponentService.registerComponent(this.formId, componentRef.instance);
+    const instance = componentRef.instance;
+    instance.formFieldConfig = this.config;
+    instance.dependencyValues =
+      this.config.dependencies.length > 0 ?
+        this.store.select(selectFields(this.formId, this.config.dependencies)).pipe(
+          distinctUntilChanged(isEqual)
+        ) : EMPTY;
+    this.fieldEditorComponentService.registerComponent(this.formId, instance);
     this.changeDetectorRef.detectChanges();
-    this._instance = componentRef.instance;
+    this._instance = instance;
   }
 
   ngOnDestroy(): void {

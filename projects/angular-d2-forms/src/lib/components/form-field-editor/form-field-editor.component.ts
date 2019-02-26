@@ -1,14 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { FormFieldConfig } from '../../form';
+import { Observable } from 'rxjs';
+import { ValidationErrors } from '@angular/forms';
 
-@Component({
-  selector: 'ad2forms-form-field-editor',
-  templateUrl: './form-field-editor.component.html',
-  styleUrls: ['./form-field-editor.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
 export class FormFieldEditorComponent<T> implements OnInit {
-  @Input() formFieldConfig: FormFieldConfig<T>;
+  formFieldConfig: FormFieldConfig<T>;
+  dependencyValues: Observable<any[]>;
 
   protected onInitialValueSet(value: T) {
   }
@@ -32,6 +29,10 @@ export class FormFieldEditorComponent<T> implements OnInit {
 
   ngOnInit(): void {
     this.onInitialValueSet(this.formFieldConfig.formControl.value);
+  }
+
+  protected setErrors(errors: ValidationErrors | null) {
+    this.formFieldConfig.formControl.setErrors(errors);
   }
 
   get hasErrors(): boolean {

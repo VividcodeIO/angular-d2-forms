@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { FormComponentConfig, FormConfig } from '../../form';
 import { FormBuilderService } from '../../services/form-builder.service';
 import { Store } from '@ngrx/store';
@@ -6,7 +6,7 @@ import { InitAction, UpdateValueAction } from '../../store/action';
 import { FormService } from '../../services/form.service';
 import { selectState } from '../../store/state';
 import { filter } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { FormTransformationService } from '../../services/form-transformation.service';
 
 @Component({
@@ -16,9 +16,11 @@ import { FormTransformationService } from '../../services/form-transformation.se
 })
 export class FormComponent implements OnChanges, OnDestroy {
   @Input() config: FormComponentConfig<any>;
+  @HostBinding('class') classes = 'ad2forms-form';
   formConfig: FormConfig<any>;
   _subscription: Subscription;
   _valueChangeSubscription: Subscription;
+  _valueChanges: Subject<any> = new BehaviorSubject<any>(null);
 
   constructor(private formBuilderService: FormBuilderService,
               private formTransformationService: FormTransformationService,
@@ -50,10 +52,12 @@ export class FormComponent implements OnChanges, OnDestroy {
       if (state.descriptorChanged) {
         this.clearValueChangeSubscription();
         const formConfig = this.formBuilderService.build(state.descriptor);
-        this._valueChangeSubscription = formConfig.formGroup.valueChanges.subscribe(value => this.store.dispatch(new UpdateValueAction({
-          formId,
-          value,
-        })));
+        this._valueChangeSubscription = formConfig.formGroup.valueChanges.subscribe(value => {
+          this.store.dispatch(new UpdateValueAction({
+            formId,
+            value,
+          }));
+        });
         this.formService.addForm(formId, formConfig.formGroup);
         this.formConfig = formConfig;
       }
@@ -62,6 +66,7 @@ export class FormComponent implements OnChanges, OnDestroy {
           emitEvent: false,
         });
       }
+      this._valueChanges.next(state.value);
     });
   }
 
@@ -95,6 +100,10 @@ export class FormComponent implements OnChanges, OnDestroy {
 
   get value(): any {
     return this.formService.getValue(this.formId);
+  }
+
+  get valueChanges(): Observable<any> {
+    return this._valueChanges;
   }
 
   save() {

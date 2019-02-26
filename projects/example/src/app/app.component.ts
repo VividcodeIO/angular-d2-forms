@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   config: FormComponentConfig<any>;
   @ViewChild('form') form: FormComponent;
 
-  constructor(private formService: FormService) {
+  constructor() {
 
   }
 
@@ -37,12 +37,12 @@ export class AppComponent implements OnInit {
         name: 'select2',
         type: 'cas-select',
         data: ['d', 'e', 'f'],
-        depFields: ['select1'],
+        dependencies: ['select1'],
       }, {
         name: 'select3',
         type: 'cas-select',
         data: ['g', 'h', 'i'],
-        depFields: ['select2'],
+        dependencies: ['select2'],
       }, {
         name: 'address',
         fields: [{
@@ -72,6 +72,7 @@ export class AppComponent implements OnInit {
       initialValue: initValue,
       transformations,
     };
+    this.form.valueChanges.subscribe(console.log);
   }
 
 
