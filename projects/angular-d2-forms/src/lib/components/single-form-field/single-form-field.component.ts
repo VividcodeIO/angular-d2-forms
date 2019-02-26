@@ -17,7 +17,14 @@ export class SingleFormFieldComponent implements AfterViewInit, OnDestroy {
   @Input() formId: string;
   @Input() config: SingleFormFieldConfig<any, any>;
   @ViewChild(CdkPortalOutlet) _portalOutlet: CdkPortalOutlet;
-  @HostBinding('class') classes = 'ad2forms-single-field';
+
+  @HostBinding('class')
+  get hostClasses(): string {
+    return this.config ? [
+      'ad2forms-field--name-' + this.config.fieldName,
+      'ad2forms-field--type-' + this.config.fieldType
+    ].join(' ') : '';
+  }
 
   private _instance: any;
 

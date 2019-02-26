@@ -9,7 +9,6 @@ import { FormFieldConfig, FormFieldsGroupConfig, SingleFormFieldConfig } from '.
 export class FormFieldsGroupComponent implements OnInit {
   @Input() formId: string;
   @Input() config: FormFieldsGroupConfig<any>;
-  @HostBinding('class') classes = 'ad2forms-fields-group';
 
   isSingleFormField(field: FormFieldConfig<any>) {
     return !field.isGroup;

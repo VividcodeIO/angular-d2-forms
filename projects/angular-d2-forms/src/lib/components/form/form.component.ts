@@ -16,7 +16,6 @@ import { FormTransformationService } from '../../services/form-transformation.se
 })
 export class FormComponent implements OnChanges, OnDestroy {
   @Input() config: FormComponentConfig<any>;
-  @HostBinding('class') classes = 'ad2forms-form';
   formConfig: FormConfig<any>;
   _subscription: Subscription;
   _valueChangeSubscription: Subscription;
