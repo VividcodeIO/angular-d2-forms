@@ -15,6 +15,10 @@ import { ShowHideControlsComponent } from './components/show-hide-controls/show-
 import { DependencyValuesComponent } from './components/dependency-values/dependency-values.component';
 import { FormEditorStateSelectorComponent } from './components/form-editor-state-selector/form-editor-state-selector.component';
 import { FormEditorCitySelectorComponent } from './components/form-editor-city-selector/form-editor-city-selector.component';
+import { FormValidationComponent } from './components/form-validation/form-validation.component';
+import { MatCardModule } from '@angular/material/card';
+import { UseFormValuesComponent } from './components/use-form-values/use-form-values.component';
+import { MatButtonModule } from '@angular/material/button';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
@@ -32,6 +36,8 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     DependencyValuesComponent,
     FormEditorStateSelectorComponent,
     FormEditorCitySelectorComponent,
+    FormValidationComponent,
+    UseFormValuesComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +49,8 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     MatSelectModule,
     MatSidenavModule,
     MatListModule,
+    MatCardModule,
+    MatButtonModule,
   ],
   entryComponents: [
     FormEditorStateSelectorComponent,

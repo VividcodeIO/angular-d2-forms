@@ -5,6 +5,7 @@ import { FormBuilderService } from '../../services/form-builder.service';
 import flatMap from 'lodash.flatmap';
 import { FormGroup } from '@angular/forms';
 import { FormTransformationResult } from '../../form-transformation';
+import { filter, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'ad2forms-form',
@@ -14,7 +15,7 @@ import { FormTransformationResult } from '../../form-transformation';
 })
 export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
   @Input() config: FormComponentConfig<T>;
-  _formConfig: FormConfig<T>;
+  _formConfig$ = new BehaviorSubject<FormConfig<T>>(null);
   _hiddenFormFields = new BehaviorSubject<string[]>([]);
   _valueChangeSubscription: Subscription;
 
@@ -22,26 +23,23 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
+    this._valueChangeSubscription = this.valueChanges.subscribe(value => this._updateValue(value));
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.config) {
       return;
     }
-    this._reset();
-    this._formConfig = this._formBuilderService.build(this.config);
-    this._valueChangeSubscription = this._formConfig.formGroup.valueChanges.subscribe(value => this._updateValue(value));
+    const formConfig = this._formBuilderService.build(this.config);
+    this._formConfig$.next(formConfig);
+
     if (this.config.value) {
-      this._formConfig.formGroup.setValue(this.config.value);
+      formConfig.formGroup.setValue(this.config.value);
     }
-    this._updateValue(this._formConfig.formGroup.value);
+    this._updateValue(formConfig.formGroup.value);
   }
 
   ngOnDestroy(): void {
-    this._reset();
-  }
-
-  private _reset() {
     this._clearValueChangeSubscription();
   }
 
@@ -57,7 +55,7 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
       descriptor: this.config.descriptor,
       value,
     });
-    results.forEach(result => this._applyTransformationResult(result, this._formConfig.formGroup));
+    results.forEach(result => this._applyTransformationResult(result, this.formConfig.formGroup));
   }
 
   private _applyTransformations(formState: FormState<T>) {
@@ -92,15 +90,36 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  get formConfig() {
+    return this._formConfig$.value;
+  }
+
+  get value() {
+    return this.formConfig && this.formConfig.formGroup.value;
+  }
+
+  getRawValue() {
+    return this.formConfig && this.formConfig.formGroup.getRawValue();
+  }
+
   get valid(): boolean {
-    return this._formConfig && this._formConfig.valid;
+    return this.formConfig && this.formConfig.valid;
   }
 
   get invalid(): boolean {
-    return this._formConfig && this._formConfig.invalid;
+    return this.formConfig && this.formConfig.invalid;
   }
 
   get valueChanges(): Observable<T> {
-    return this._formConfig && this._formConfig.formGroup.valueChanges;
+    return this._formConfig$.pipe(
+      filter(v => !!v),
+      switchMap(config => config.formGroup.valueChanges),
+    );
+  }
+
+  reset(value?: any, options?: any) {
+    if (this.formConfig) {
+      this.formConfig.formGroup.reset(value, options);
+    }
   }
 }

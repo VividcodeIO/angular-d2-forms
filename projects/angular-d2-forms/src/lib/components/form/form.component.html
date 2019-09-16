@@ -1,3 +1,3 @@
-<form *ngIf="_formConfig" [formGroup]="_formConfig.formGroup">
-  <ad2forms-form-fields-group [config]="_formConfig" [form]="this" [hiddenFormFields]="_hiddenFormFields"></ad2forms-form-fields-group>
+<form *ngIf="formConfig" [formGroup]="formConfig.formGroup">
+  <ad2forms-form-fields-group [config]="formConfig" [form]="this" [hiddenFormFields]="_hiddenFormFields"></ad2forms-form-fields-group>
 </form>

@@ -10,3 +10,7 @@
 .side-nav {
   width: 20vw;
 }
+
+mat-sidenav-content {
+  padding: 2vw;
+}

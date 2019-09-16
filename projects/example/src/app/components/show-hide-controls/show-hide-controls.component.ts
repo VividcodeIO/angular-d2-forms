@@ -12,8 +12,6 @@ export class ShowHideControlsComponent implements OnInit {
   constructor() {
     this.formConfig = {
       descriptor: {
-        id: '',
-        name: '',
         fields: [
           {
             name: 'protocol',

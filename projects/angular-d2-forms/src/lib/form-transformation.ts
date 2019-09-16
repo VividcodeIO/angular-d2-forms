@@ -22,7 +22,7 @@ export abstract class FormTransformation<T> {
 
   protected findFieldByName(formDescriptor: FormDescriptor<T>, fieldPath: string) {
     const path = fieldPath.split('.');
-    let formField: FormField<any> = formDescriptor;
+    let formField: (FormField<any> | FormDescriptor<T>) = formDescriptor;
     let name;
     while (!!(name = path.shift())) {
       if (formField.fields) {

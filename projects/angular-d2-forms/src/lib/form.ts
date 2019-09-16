@@ -1,56 +1,26 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { AbstractControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import find from 'lodash.find';
 import includes from 'lodash.includes';
 import concat from 'lodash.concat';
 import isEqual from 'lodash.isequal';
 import { Observable } from 'rxjs';
 import { FormTransformation } from './form-transformation';
-
-function getFormDisplayName(formField: FormField<any>) {
-  return formField.label || formField.name;
-}
-
-export type ErrorMessageBuilder = (field: FormField<any>, validationResult: any, value: any) => string;
-
-export interface Validator {
-  key: string;
-  message: string | ErrorMessageBuilder;
-  validator: ValidatorFn;
-}
-
-export const RequiredValidator: Validator = {
-  key: 'required',
-  message: (field: FormField<any>) => `The value of ${getFormDisplayName(field)} is required.`,
-  validator: Validators.required,
-};
-
-export function minLengthValidator(length: number): Validator {
-  return {
-    key: 'minlength',
-    message: (field, result) => `The minimum length of ${getFormDisplayName(field)} is ${result.requiredLength}.`,
-    validator: Validators.minLength(length),
-  };
-}
+import { FormFieldValidator, getFormDisplayName } from './form-validation';
 
 export interface FormField<T> {
   name: string;
   label?: string;
   type?: string;
   disabled?: boolean;
-  validators?: Validator[];
+  validators?: FormFieldValidator[];
   data?: any;
   fields?: FormField<any>[];
   dependencies?: string[];
 }
 
-export interface FormFieldWithState<T> extends FormField<T> {
-  hidden?: boolean;
-  disabled?: boolean;
-}
-
-export interface FormDescriptor<T> extends FormField<T> {
-  id: string;
+export interface FormDescriptor<T> {
+  fields?: FormField<any>[];
 }
 
 export function isFormFieldGroup(formField: FormField<any>) {
@@ -112,7 +82,7 @@ export abstract class FormFieldConfig<T> {
       return [];
     }
     return Object.keys(errors).map(key => {
-      const validator: Validator = find(this.formField.validators, ['key', key]);
+      const validator: FormFieldValidator = find(this.formField.validators, ['key', key]);
       if (typeof validator.message === 'string') {
         return validator.message;
       } else {
@@ -146,15 +116,11 @@ export class FormFieldsGroupConfig<T> extends FormFieldConfig<T> {
 
 export class FormConfig<T> extends FormFieldsGroupConfig<T> {
   constructor(formDescriptor: FormDescriptor<T>, fields: FormFieldConfig<any>[] = [], formGroup: FormGroup, public readonly value?: T) {
-    super(formDescriptor, fields, formGroup, []);
+    super({name: '_form', fields: formDescriptor.fields}, fields, formGroup, []);
   }
 
   get formDescriptor(): FormDescriptor<T> {
     return (this.formField as FormDescriptor<T>);
-  }
-
-  get id(): string {
-    return this.formDescriptor.id;
   }
 
   get valid(): boolean {

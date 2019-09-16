@@ -12,8 +12,6 @@ export class DependencyValuesComponent implements OnInit {
   constructor() {
     this.formConfig = {
       descriptor: {
-        id: '',
-        name: '',
         fields: [
           {
             name: 'country',

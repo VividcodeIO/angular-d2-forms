@@ -2,10 +2,6 @@
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-.form-wrapper {
-  margin: 1vw;
-}
-
 form {
   width: 30vw !important;
 }

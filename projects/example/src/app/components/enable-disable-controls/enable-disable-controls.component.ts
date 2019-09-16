@@ -12,8 +12,6 @@ export class EnableDisableControlsComponent implements OnInit {
   constructor() {
     this.checkBoxForm = {
       descriptor: {
-        id: '',
-        name: '',
         fields: [
           {
             name: 'name',
