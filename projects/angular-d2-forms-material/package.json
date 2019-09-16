@@ -5,9 +5,9 @@
     "name": "Fu Cheng"
   },
   "bugs": {
-    "url": "https://github.com/alexcheng1982/angular-d2-forms-material/issues"
+    "url": "https://github.com/VividcodeIO/angular-d2-forms-material/issues"
   },
-  "homepage": "https://github.com/alexcheng1982/angular-d2-forms-material#readme",
+  "homepage": "https://github.com/VividcodeIO/angular-d2-forms-material#readme",
   "keywords": [
     "Angular",
     "Form",
@@ -23,6 +23,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexcheng1982/angular-d2-forms-material.git"
+    "url": "git+https://github.com/VividcodeIO/angular-d2-forms-material.git"
   }
 }
