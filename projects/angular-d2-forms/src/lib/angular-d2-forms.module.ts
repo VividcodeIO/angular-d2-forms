@@ -6,12 +6,7 @@ import { FormFieldsGroupComponent } from './components/form-fields-group/form-fi
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PortalModule } from '@angular/cdk/portal';
-import { StoreModule } from '@ngrx/store';
-import { featureName, reducer } from './store/state';
-import { FormService } from './services/form.service';
 import { FieldEditorRegistryService } from './services/field-editor-registry.service';
-import { EffectsModule } from '@ngrx/effects';
-import { FormEffects } from './store/effects';
 
 @NgModule({
   declarations: [
@@ -24,15 +19,12 @@ import { FormEffects } from './store/effects';
     CommonModule,
     ReactiveFormsModule,
     PortalModule,
-    StoreModule.forFeature(featureName, reducer),
-    EffectsModule.forFeature([FormEffects]),
   ],
   entryComponents: [
     FieldBasicInputComponent,
   ],
   exports: [FormComponent],
   providers: [
-    FormService,
     FieldEditorRegistryService,
   ]
 })

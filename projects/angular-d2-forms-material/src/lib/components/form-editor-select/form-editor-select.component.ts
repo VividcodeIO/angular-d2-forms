@@ -8,8 +8,4 @@ import { FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
 })
 export class FormEditorSelectComponent extends FormFieldEditorComponent<any> {
 
-  constructor() {
-    super();
-  }
-
 }

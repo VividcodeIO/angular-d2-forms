@@ -1,6 +1,6 @@
 {
   "name": "@vividcode/angular-d2-forms",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "author": {
     "name": "Fu Cheng"
   },
@@ -14,18 +14,20 @@
   ],
   "license": "MIT",
   "peerDependencies": {
+    "@angular/cdk": "^7.3.1",
     "@angular/common": "^7.1.0",
     "@angular/core": "^7.1.0",
-    "@angular/cdk": "^7.3.1",
-    "@ngrx/effects": "^7.2.0",
-    "@ngrx/entity": "^7.2.0",
-    "@ngrx/store": "^7.2.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.concat": "^4.5.0",
+    "lodash.compact": "^3.0.1",
+    "lodash.find": "^4.6.0",
     "lodash.get": "^4.4.2",
+    "lodash.includes": "^4.3.0",
     "lodash.isequal": "^4.5.0",
     "lodash.without": "^4.4.0",
-    "lodash.find": "^4.6.0"
+    "lodash.flatmap": "^4.5.0",
+    "lodash.groupby": "^4.6.0",
+    "lodash.set": "^4.3.2"
   },
   "repository": {
     "type": "git",

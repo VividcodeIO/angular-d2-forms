@@ -1,8 +1,11 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AbstractControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import get from 'lodash.get';
-import isEqual from 'lodash.isequal';
 import find from 'lodash.find';
+import includes from 'lodash.includes';
+import concat from 'lodash.concat';
+import isEqual from 'lodash.isequal';
+import { Observable } from 'rxjs';
+import { FormTransformation } from './form-transformation';
 
 function getFormDisplayName(formField: FormField<any>) {
   return formField.label || formField.name;
@@ -41,6 +44,11 @@ export interface FormField<T> {
   dependencies?: string[];
 }
 
+export interface FormFieldWithState<T> extends FormField<T> {
+  hidden?: boolean;
+  disabled?: boolean;
+}
+
 export interface FormDescriptor<T> extends FormField<T> {
   id: string;
 }
@@ -54,53 +62,16 @@ export interface FormState<T> {
   value: T;
 }
 
-export abstract class FormTransformation<T> {
-  abstract transform(formState: FormState<T>): FormState<T>;
 
-  protected getFieldValue(formState: FormState<T>, fieldName: string) {
-    return get(formState.value, fieldName);
-  }
-
-  protected findFieldByName(formDescriptor: FormDescriptor<T>, fieldName: string) {
-    const fields = fieldName.split('.');
-    let formField: FormField<any> = formDescriptor;
-    let name;
-    while (!!(name = fields.shift())) {
-      if (formField.fields) {
-        for (let i = 0; i < formField.fields.length; i++) {
-          const field = formField.fields[i];
-          if (isEqual(name, field.name)) {
-            if (fields.length === 0) {
-              return field;
-            } else {
-              formField = field;
-              break;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-export class ToggleEnabledStateFormTransformation<T> extends FormTransformation<T> {
-  constructor(public readonly sourceFieldName: string, public readonly targetFieldName: string) {
-    super();
-  }
-
-  transform(formState: FormState<T>): FormState<T> {
-    const fieldValue = this.getFieldValue(formState, this.sourceFieldName);
-    const field = this.findFieldByName(formState.descriptor, this.targetFieldName);
-    if (field) {
-      field.disabled = !fieldValue;
-    }
-    return formState;
-  }
+export interface DependencyValues {
+  [fieldPath: string]: Observable<any>;
 }
 
 export abstract class FormFieldConfig<T> {
   protected constructor(public readonly formField: FormField<T>,
-                        public readonly formGroup: FormGroup) {
+                        public readonly formGroup: FormGroup,
+                        public readonly fieldPath: string[],
+                        public readonly dependencyValues: DependencyValues) {
   }
 
   get fieldName(): string {
@@ -109,6 +80,10 @@ export abstract class FormFieldConfig<T> {
 
   get fieldType(): string {
     return this.formField.type;
+  }
+
+  get fieldPathString(): string {
+    return this.fieldPath.join('.');
   }
 
   get isGroup(): boolean {
@@ -131,14 +106,6 @@ export abstract class FormFieldConfig<T> {
     return this.formField.data;
   }
 
-  get dependencies(): string[] {
-    return this.formField.dependencies || [];
-  }
-
-  get depValues(): any {
-    return (this.formField.dependencies || []).map(field => get(this.formGroup.value, field));
-  }
-
   get errors(): string[] {
     const errors = this.formControl.errors;
     if (!errors) {
@@ -159,29 +126,35 @@ export class SingleFormFieldConfig<T, C> extends FormFieldConfig<T> {
 
   constructor(formField: FormField<T>,
               public readonly componentType: ComponentType<T>,
-              formGroup: FormGroup) {
-    super(formField, formGroup);
+              formGroup: FormGroup,
+              fieldPath: string[],
+              dependencyValues: DependencyValues = {}) {
+    super(formField, formGroup, fieldPath, dependencyValues);
   }
-
 }
 
 export class FormFieldsGroupConfig<T> extends FormFieldConfig<T> {
 
   constructor(formField: FormField<T>,
               public fields: FormFieldConfig<any>[] = [],
-              formGroup: FormGroup) {
-    super(formField, formGroup);
+              formGroup: FormGroup,
+              fieldPath: string[]) {
+    super(formField, formGroup, fieldPath, {});
   }
 
 }
 
 export class FormConfig<T> extends FormFieldsGroupConfig<T> {
   constructor(formDescriptor: FormDescriptor<T>, fields: FormFieldConfig<any>[] = [], formGroup: FormGroup, public readonly value?: T) {
-    super(formDescriptor, fields, formGroup);
+    super(formDescriptor, fields, formGroup, []);
+  }
+
+  get formDescriptor(): FormDescriptor<T> {
+    return (this.formField as FormDescriptor<T>);
   }
 
   get id(): string {
-    return (this.formField as FormDescriptor<any>).id;
+    return this.formDescriptor.id;
   }
 
   get valid(): boolean {
@@ -197,6 +170,13 @@ export type FormFieldMatcher = (type: string, name?: string, formId?: string) =>
 
 export interface FormComponentConfig<T> {
   descriptor: FormDescriptor<T>;
-  initialValue?: T;
+  value?: T;
   transformations?: FormTransformation<T>[];
 }
+
+export const includesInFieldPaths = (fieldPaths: string[], fieldPath: string) =>
+  includes(fieldPaths, fieldPath);
+
+export const addFieldPaths = (fieldPaths: string[], fieldPath: string) => concat(fieldPaths, fieldPath);
+
+export const removeFieldPaths = (fieldPaths: string[], fieldPath: string) => fieldPaths.filter(v => !isEqual(v, fieldPath));

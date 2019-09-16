@@ -15,7 +15,10 @@
       "lodash.get": "lodash.get",
       "lodash.isequal": "lodash.isequal",
       "lodash.clonedeep": "lodash.clonedeep",
-      "lodash.find": "lodash.find"
+      "lodash.find": "lodash.find",
+      "lodash.includes": "lodash.includes",
+      "lodash.flatmap": "lodash.flatmap",
+      "lodash.compact": "lodash.compact"
     }
   }
 }

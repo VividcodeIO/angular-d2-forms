@@ -1,34 +1,19 @@
 import { OnInit } from '@angular/core';
-import { FormFieldConfig } from '../../form';
-import { Observable } from 'rxjs';
+import { DependencyValues, FormFieldConfig } from '../../form';
 import { ValidationErrors } from '@angular/forms';
 
-export class FormFieldEditorComponent<T> implements OnInit {
+export abstract class FormFieldEditorComponent<T> implements OnInit {
   formFieldConfig: FormFieldConfig<T>;
-  dependencyValues: Observable<any[]>;
 
-  protected onInitialValueSet(value: T) {
+  protected onValue(value: T) {
   }
 
   protected getValue(): T {
     return this.formFieldConfig.formControl.value;
   }
 
-  protected setValue(value: T, emitEvent = false) {
-    this.formFieldConfig.formControl.setValue(value, {
-      emitEvent,
-    });
-  }
-
-  protected notifyValueChanged(value: T) {
-    this.setValue(value, true);
-  }
-
-  protected save() {
-  }
-
   ngOnInit(): void {
-    this.onInitialValueSet(this.formFieldConfig.formControl.value);
+    this.onValue(this.formFieldConfig.formControl.value);
   }
 
   protected setErrors(errors: ValidationErrors | null) {
@@ -43,4 +28,7 @@ export class FormFieldEditorComponent<T> implements OnInit {
     return this.formFieldConfig.errors;
   }
 
+  get dependencyValues(): DependencyValues {
+    return this.formFieldConfig.dependencyValues;
+  }
 }

@@ -4,20 +4,22 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AngularD2FormsModule, FieldEditorRegistryService } from '@vividcode/angular-d2-forms';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AngularD2FormsMaterialModule } from '@vividcode/angular-d2-forms-material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormEditorUserAliasComponent } from './components/form-editor-user-alias/form-editor-user-alias.component';
-import { EffectsModule } from '@ngrx/effects';
-import { FormEditorCascadingSelectComponent } from './components/form-editor-cascading-select/form-editor-cascading-select.component';
 import { MatSelectModule } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { EnableDisableControlsComponent } from './components/enable-disable-controls/enable-disable-controls.component';
+import { ShowHideControlsComponent } from './components/show-hide-controls/show-hide-controls.component';
+import { DependencyValuesComponent } from './components/dependency-values/dependency-values.component';
+import { FormEditorStateSelectorComponent } from './components/form-editor-state-selector/form-editor-state-selector.component';
+import { FormEditorCitySelectorComponent } from './components/form-editor-city-selector/form-editor-city-selector.component';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
-    service.registerField('alias', 'UserAlias', FormEditorUserAliasComponent);
-    service.registerGlobal('cas-select', FormEditorCascadingSelectComponent);
+    service.registerGlobal('country-state', FormEditorStateSelectorComponent);
+    service.registerGlobal('country-city', FormEditorCitySelectorComponent);
   };
   return func;
 }
@@ -25,8 +27,11 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
 @NgModule({
   declarations: [
     AppComponent,
-    FormEditorUserAliasComponent,
-    FormEditorCascadingSelectComponent,
+    EnableDisableControlsComponent,
+    ShowHideControlsComponent,
+    DependencyValuesComponent,
+    FormEditorStateSelectorComponent,
+    FormEditorCitySelectorComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,16 +40,13 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     AppRoutingModule,
     AngularD2FormsModule,
     AngularD2FormsMaterialModule,
-    StoreModule.forRoot({}),
-    EffectsModule.forRoot([]),
-    StoreDevtoolsModule.instrument({
-      name: 'NgRx DevTools',
-    }),
     MatSelectModule,
+    MatSidenavModule,
+    MatListModule,
   ],
   entryComponents: [
-    FormEditorUserAliasComponent,
-    FormEditorCascadingSelectComponent,
+    FormEditorStateSelectorComponent,
+    FormEditorCitySelectorComponent,
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: registerFormEditors, deps: [FieldEditorRegistryService], multi: true},

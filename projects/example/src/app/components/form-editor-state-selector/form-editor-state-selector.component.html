@@ -1,9 +1,10 @@
 <div [formGroup]="formFieldConfig.formGroup">
   <mat-form-field>
     <mat-select [placeholder]="formFieldConfig.label" [formControlName]="formFieldConfig.fieldName">
-      <mat-option *ngFor="let value of formFieldConfig.data" [value]="value">
-        {{dependencyValues | async}} - {{value}}
+      <mat-option *ngFor="let value of _states | async" [value]="value">
+        {{value}}
       </mat-option>
     </mat-select>
   </mat-form-field>
 </div>
+

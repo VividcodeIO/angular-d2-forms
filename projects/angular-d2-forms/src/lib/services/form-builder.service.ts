@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
+  FormComponentConfig,
   FormConfig,
-  FormDescriptor,
   FormField,
   FormFieldConfig,
   FormFieldsGroupConfig,
@@ -21,23 +21,48 @@ export class FormBuilderService {
               private fb: FormBuilder) {
   }
 
-  build<T>(formDescriptor: FormDescriptor<T>): FormConfig<T> {
+  build<T>(formComponentConfig: FormComponentConfig<T>): FormConfig<T> {
+    const { descriptor, value } = formComponentConfig;
     const formGroup = this.fb.group({});
-    return new FormConfig(formDescriptor, formDescriptor.fields.map(field => this.resolveField(field, formGroup)), formGroup);
+    return new FormConfig(
+      descriptor,
+      descriptor.fields.map(field => this._resolveField(field, formGroup, [], value, formGroup)),
+      formGroup,
+      value
+    );
   }
 
-  private resolveField<T>(field: FormField<T>, formGroup: FormGroup): FormFieldConfig<T> {
+  private _resolveField<T>(field: FormField<T>,
+                          formGroup: FormGroup,
+                          fieldPath: string[],
+                          groupValue: any,
+                          rootFormGroup: FormGroup): FormFieldConfig<T> {
+    const fieldValue = get(groupValue, field.name, null);
     if (!isFormFieldGroup(field)) {
       formGroup.addControl(field.name, this.fb.control({
-        value: null,
+        value: fieldValue,
         disabled: field.disabled,
       }, this.getValidators(field)));
-      return new SingleFormFieldConfig(field,
-        this.fieldEditorResolver.resolve(field), formGroup);
+      const dependencyValues = (field.dependencies || []).reduce((obj, item) => {
+        obj[item] = rootFormGroup.get(item).valueChanges;
+        return obj;
+      }, {});
+      return new SingleFormFieldConfig(
+        field,
+        this.fieldEditorResolver.resolve(field),
+        formGroup,
+        fieldPath.concat(field.name),
+        dependencyValues
+      );
     } else {
       const group = this.fb.group({});
       formGroup.addControl(field.name, group);
-      return new FormFieldsGroupConfig(field, field.fields.map(childField => this.resolveField(childField, group)), group);
+      const groupFieldPath = fieldPath.concat(field.name);
+      return new FormFieldsGroupConfig(
+        field,
+        field.fields.map(childField => this._resolveField(childField, group, groupFieldPath, fieldValue, rootFormGroup)),
+        group,
+        groupFieldPath);
     }
   }
 

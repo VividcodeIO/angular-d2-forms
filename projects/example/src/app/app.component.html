@@ -1,5 +1,12 @@
-<div>
-  <ad2forms-form [config]="config" #form></ad2forms-form>
-  <button [disabled]="form.invalid" (click)="save()">Save</button>
-</div>
-<router-outlet></router-outlet>
+<mat-sidenav-container class="main-container">
+  <mat-sidenav mode="side" opened="true" class="side-nav">
+    <mat-list>
+      <a mat-list-item [routerLink]="'enable-disable-controls'">Enable/Disable controls</a>
+      <a mat-list-item [routerLink]="'show-hide-controls'">Show/Hide controls</a>
+      <a mat-list-item [routerLink]="'dependency-values'">Dependency values</a>
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

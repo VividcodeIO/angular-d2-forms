@@ -7,9 +7,4 @@ import { FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
   styleUrls: ['./form-editor-boolean.component.css']
 })
 export class FormEditorBooleanComponent extends FormFieldEditorComponent<boolean> {
-
-  constructor() {
-    super();
-  }
-
 }

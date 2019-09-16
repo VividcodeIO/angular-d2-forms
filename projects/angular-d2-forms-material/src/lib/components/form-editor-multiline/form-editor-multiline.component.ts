@@ -7,10 +7,4 @@ import { FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
   styleUrls: ['./form-editor-multiline.component.css']
 })
 export class FormEditorMultilineComponent extends FormFieldEditorComponent<string> {
-
-  constructor() {
-    super();
-  }
-
-
 }

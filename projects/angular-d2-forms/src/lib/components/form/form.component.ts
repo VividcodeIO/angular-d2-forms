@@ -1,111 +1,106 @@
-import { Component, HostBinding, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { FormComponentConfig, FormConfig } from '../../form';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { addFieldPaths, FormComponentConfig, FormConfig, FormState, removeFieldPaths } from '../../form';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FormBuilderService } from '../../services/form-builder.service';
-import { Store } from '@ngrx/store';
-import { InitAction, UpdateValueAction } from '../../store/action';
-import { FormService } from '../../services/form.service';
-import { selectState } from '../../store/state';
-import { filter } from 'rxjs/operators';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
-import { FormTransformationService } from '../../services/form-transformation.service';
+import flatMap from 'lodash.flatmap';
+import { FormGroup } from '@angular/forms';
+import { FormTransformationResult } from '../../form-transformation';
 
 @Component({
   selector: 'ad2forms-form',
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css']
+  styleUrls: ['./form.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormComponent implements OnChanges, OnDestroy {
-  @Input() config: FormComponentConfig<any>;
-  formConfig: FormConfig<any>;
-  _subscription: Subscription;
+export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
+  @Input() config: FormComponentConfig<T>;
+  _formConfig: FormConfig<T>;
+  _hiddenFormFields = new BehaviorSubject<string[]>([]);
   _valueChangeSubscription: Subscription;
-  _valueChanges: Subject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private formBuilderService: FormBuilderService,
-              private formTransformationService: FormTransformationService,
-              private formService: FormService,
-              private store: Store<any>) {
+  constructor(private _formBuilderService: FormBuilderService) {
   }
 
-  get formId(): string {
-    return this.config.descriptor.id;
+  ngOnInit(): void {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.config.currentValue) {
+    if (!this.config) {
       return;
     }
-    this.reset();
-    const config: FormComponentConfig<any> = changes.config.currentValue;
-    const formId = config.descriptor.id;
-    this.formTransformationService.set(formId, config.transformations);
-
-    this.store.dispatch(new InitAction({
-      descriptor: config.descriptor,
-      value: config.initialValue,
-    }));
-
-    this._subscription = this.store.select(selectState(formId)).pipe(
-      filter(value => !!value),
-    ).subscribe(state => {
-      if (state.descriptorChanged) {
-        this.clearValueChangeSubscription();
-        const formConfig = this.formBuilderService.build(state.descriptor);
-        this._valueChangeSubscription = formConfig.formGroup.valueChanges.subscribe(value => {
-          this.store.dispatch(new UpdateValueAction({
-            formId,
-            value,
-          }));
-        });
-        this.formService.addForm(formId, formConfig.formGroup);
-        this.formConfig = formConfig;
-      }
-      if ((state.valueChanged || state.descriptorChanged) && this.formConfig) {
-        this.formConfig.formGroup.patchValue(state.value, {
-          emitEvent: false,
-        });
-      }
-      this._valueChanges.next(state.value);
-    });
+    this._reset();
+    this._formConfig = this._formBuilderService.build(this.config);
+    this._valueChangeSubscription = this._formConfig.formGroup.valueChanges.subscribe(value => this._updateValue(value));
+    if (this.config.value) {
+      this._formConfig.formGroup.setValue(this.config.value);
+    }
+    this._updateValue(this._formConfig.formGroup.value);
   }
 
   ngOnDestroy(): void {
-    this.formService.removeForm(this.formId);
-    this.reset();
+    this._reset();
   }
 
-  private reset() {
-    this.clearValueChangeSubscription();
-    if (this._subscription) {
-      this._subscription.unsubscribe();
-      this._subscription = undefined;
-    }
+  private _reset() {
+    this._clearValueChangeSubscription();
   }
 
-  private clearValueChangeSubscription() {
+  private _clearValueChangeSubscription() {
     if (this._valueChangeSubscription) {
       this._valueChangeSubscription.unsubscribe();
       this._valueChangeSubscription = undefined;
     }
   }
 
+  private _updateValue(value: any) {
+    const results = this._applyTransformations({
+      descriptor: this.config.descriptor,
+      value,
+    });
+    results.forEach(result => this._applyTransformationResult(result, this._formConfig.formGroup));
+  }
+
+  private _applyTransformations(formState: FormState<T>) {
+    return flatMap(this.config.transformations || [], transformation => transformation.transform(formState));
+  }
+
+  private _applyTransformationResult(result: FormTransformationResult, formGroup: FormGroup) {
+    const {fieldPath, change} = result;
+    const formControl = formGroup.get(fieldPath);
+    if (!formControl) {
+      return;
+    }
+    switch (change.type) {
+      case 'disable':
+        formControl.disable({
+          onlySelf: true,
+        });
+        break;
+      case 'enable':
+        formControl.enable({
+          onlySelf: true,
+        });
+        break;
+      case 'show':
+        this._hiddenFormFields.next(removeFieldPaths(this._hiddenFormFields.value, fieldPath));
+        break;
+      case 'hide':
+        this._hiddenFormFields.next(addFieldPaths(this._hiddenFormFields.value, fieldPath));
+        break;
+      default:
+        break;
+    }
+  }
+
   get valid(): boolean {
-    return this.formConfig && this.formConfig.valid;
+    return this._formConfig && this._formConfig.valid;
   }
 
   get invalid(): boolean {
-    return this.formConfig && this.formConfig.invalid;
+    return this._formConfig && this._formConfig.invalid;
   }
 
-  get value(): any {
-    return this.formService.getValue(this.formId);
-  }
-
-  get valueChanges(): Observable<any> {
-    return this._valueChanges;
-  }
-
-  save() {
-    this.formService.save(this.formId);
+  get valueChanges(): Observable<T> {
+    return this._formConfig && this._formConfig.formGroup.valueChanges;
   }
 }

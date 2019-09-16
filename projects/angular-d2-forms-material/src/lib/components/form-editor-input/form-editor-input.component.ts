@@ -7,8 +7,4 @@ import { FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
   styleUrls: ['./form-editor-input.component.css']
 })
 export class FormEditorInputComponent extends FormFieldEditorComponent<string> {
-
-  constructor() {
-    super();
-  }
 }

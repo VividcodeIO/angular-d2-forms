@@ -8,7 +8,4 @@ import { FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
 })
 export class FormEditorNumberComponent extends FormFieldEditorComponent<number> {
 
-  constructor() {
-    super();
-  }
 }
