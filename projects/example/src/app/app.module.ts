@@ -19,6 +19,7 @@ import { FormValidationComponent } from './components/form-validation/form-valid
 import { MatCardModule } from '@angular/material/card';
 import { UseFormValuesComponent } from './components/use-form-values/use-form-values.component';
 import { MatButtonModule } from '@angular/material/button';
+import { SetControlValuesComponent } from './components/set-control-values/set-control-values.component';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
@@ -38,6 +39,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     FormEditorCitySelectorComponent,
     FormValidationComponent,
     UseFormValuesComponent,
+    SetControlValuesComponent,
   ],
   imports: [
     BrowserModule,

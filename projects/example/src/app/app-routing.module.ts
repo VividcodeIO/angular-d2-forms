@@ -5,6 +5,7 @@ import { ShowHideControlsComponent } from './components/show-hide-controls/show-
 import { DependencyValuesComponent } from './components/dependency-values/dependency-values.component';
 import { FormValidationComponent } from './components/form-validation/form-validation.component';
 import { UseFormValuesComponent } from './components/use-form-values/use-form-values.component';
+import { SetControlValuesComponent } from './components/set-control-values/set-control-values.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'use-form-values',
     component: UseFormValuesComponent,
+  },
+  {
+    path: 'set-control-values',
+    component: SetControlValuesComponent,
   }
 ];
 

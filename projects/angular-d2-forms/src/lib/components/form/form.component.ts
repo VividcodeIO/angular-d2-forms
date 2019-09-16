@@ -20,10 +20,11 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
   _valueChangeSubscription: Subscription;
 
   constructor(private _formBuilderService: FormBuilderService) {
+    this._valueChangeSubscription = this.valueChanges.subscribe(value => this._updateValue(value));
   }
 
   ngOnInit(): void {
-    this._valueChangeSubscription = this.valueChanges.subscribe(value => this._updateValue(value));
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -34,7 +35,7 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
     this._formConfig$.next(formConfig);
 
     if (this.config.value) {
-      formConfig.formGroup.setValue(this.config.value);
+      formConfig.formGroup.patchValue(this.config.value);
     }
     this._updateValue(formConfig.formGroup.value);
   }
@@ -84,6 +85,11 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
         break;
       case 'hide':
         this._hiddenFormFields.next(addFieldPaths(this._hiddenFormFields.value, fieldPath));
+        break;
+      case 'setValue':
+        formControl.setValue(change.value, {
+          onlySelf: true,
+        });
         break;
       default:
         break;

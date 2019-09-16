@@ -91,3 +91,33 @@ export class ShowHideFormTransformation<T> extends FormTransformation<T> {
   }
 
 }
+
+export interface TargetFieldValue {
+  fieldPath: string;
+  value: any;
+}
+
+export class SetValueFormTransformation<T> extends FormTransformation<T> {
+  constructor(public readonly sourceFieldPath: string,
+              public readonly sourceFieldValue: any,
+              public readonly targetFieldValues: TargetFieldValue[]) {
+    super();
+  }
+
+  transform(formState: FormState<T>): FormTransformationResult[] {
+    const fieldValue = this.getFieldValue(formState, this.sourceFieldPath);
+    return compact(this.targetFieldValues.map(({fieldPath, value}) => {
+      const field = this.findFieldByName(formState.descriptor, fieldPath);
+      if (field && isEqual(fieldValue, this.sourceFieldValue)) {
+        return {
+          fieldPath,
+          change: {
+            type: 'setValue',
+            value,
+          },
+        };
+      }
+    }));
+  }
+
+}

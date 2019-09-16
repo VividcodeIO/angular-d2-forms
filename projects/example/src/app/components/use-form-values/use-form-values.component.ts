@@ -40,6 +40,7 @@ export class UseFormValuesComponent implements OnInit {
         ],
       },
       value: {
+        name: 'test',
         count: 300,
       },
     };
