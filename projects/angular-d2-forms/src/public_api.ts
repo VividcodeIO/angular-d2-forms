@@ -2,10 +2,10 @@
  * Public API Surface of angular-d2-forms
  */
 
-export * from './lib/angular-d2-forms.module';
-export * from './lib/form';
+export { AngularD2FormsModule } from './lib/angular-d2-forms.module';
+export { FormComponentConfig, FormDescriptor, FormField, FormState, DependencyValues, FormFieldConfig, FormFieldMatcher } from './lib/form';
 export * from './lib/form-transformation';
 export * from './lib/form-validation';
-export * from './lib/services/field-editor-registry.service';
-export * from './lib/components/form-field-editor/form-field-editor.component';
-export * from './lib/components/form/form.component';
+export { FieldEditorRegistryService } from './lib/services/field-editor-registry.service';
+export { FormFieldEditorComponent } from './lib/components/form-field-editor/form-field-editor.component';
+export { FormComponent } from './lib/components/form/form.component';
