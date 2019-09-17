@@ -24,8 +24,8 @@ import { filter, switchMap } from 'rxjs/operators';
 })
 export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
   @Input() config: FormComponentConfig<T>;
+  hiddenFormFields = new BehaviorSubject<string[]>([]);
   private _formConfig$ = new BehaviorSubject<FormConfig<T>>(null);
-  private _hiddenFormFields = new BehaviorSubject<string[]>([]);
   private _valueChangeSubscription: Subscription;
 
   constructor(private _formBuilderService: FormBuilderService) {
@@ -108,10 +108,10 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
         });
         break;
       case 'show':
-        this._hiddenFormFields.next(removeFieldPaths(this._hiddenFormFields.value, fieldPath));
+        this.hiddenFormFields.next(removeFieldPaths(this.hiddenFormFields.value, fieldPath));
         break;
       case 'hide':
-        this._hiddenFormFields.next(addFieldPaths(this._hiddenFormFields.value, fieldPath));
+        this.hiddenFormFields.next(addFieldPaths(this.hiddenFormFields.value, fieldPath));
         break;
       case 'setValue':
         formControl.setValue(change.value, {
