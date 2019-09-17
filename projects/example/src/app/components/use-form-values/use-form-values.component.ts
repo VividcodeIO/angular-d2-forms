@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class UseFormValuesComponent implements OnInit {
   _formConfig: FormComponentConfig<any>;
-  @ViewChild('form') _form: FormComponent<any>;
+  @ViewChild('form', {static: true}) _form: FormComponent<any>;
   _formValue$: Observable<any>;
 
   constructor() {

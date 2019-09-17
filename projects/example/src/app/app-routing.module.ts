@@ -7,6 +7,7 @@ import { FormValidationComponent } from './components/form-validation/form-valid
 import { UseFormValuesComponent } from './components/use-form-values/use-form-values.component';
 import { SetControlValuesComponent } from './components/set-control-values/set-control-values.component';
 import { CustomFormFieldEditorsComponent } from './components/custom-form-field-editors/custom-form-field-editors.component';
+import { ExampleHomeComponent } from './components/example-home/example-home.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'custom-form-field-editors',
     component: CustomFormFieldEditorsComponent,
+  },
+  {
+    path: '',
+    component: ExampleHomeComponent,
   }
 ];
 

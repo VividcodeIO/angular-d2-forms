@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class CustomFormFieldEditorsComponent implements OnInit, AfterViewInit {
   formConfig: FormComponentConfig<any>;
-  @ViewChild('parentForm') _form: FormComponent<any>;
+  @ViewChild('parentForm', {static: true}) _form: FormComponent<any>;
   _valueChanges: Observable<any>;
 
   constructor() {

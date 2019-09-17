@@ -22,6 +22,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { SetControlValuesComponent } from './components/set-control-values/set-control-values.component';
 import { FormEditorTimeUnitComponent } from './components/form-editor-time-unit/form-editor-time-unit.component';
 import { CustomFormFieldEditorsComponent } from './components/custom-form-field-editors/custom-form-field-editors.component';
+import { ExampleHomeComponent } from './components/example-home/example-home.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
@@ -45,6 +47,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     SetControlValuesComponent,
     FormEditorTimeUnitComponent,
     CustomFormFieldEditorsComponent,
+    ExampleHomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +61,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     MatListModule,
     MatCardModule,
     MatButtonModule,
+    MatToolbarModule,
   ],
   entryComponents: [
     FormEditorStateSelectorComponent,

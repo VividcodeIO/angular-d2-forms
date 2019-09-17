@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class FormEditorTimeUnitComponent extends FormFieldEditorComponent<number> {
   _timeUnits = ['MILLISECONDS', 'SECONDS', 'MINUTES', 'HOURS'];
   _formConfig: FormComponentConfig<any>;
-  @ViewChild('form') _form: FormComponent<any>;
+  @ViewChild('form', {static: true}) _form: FormComponent<any>;
 
   constructor() {
     super();
