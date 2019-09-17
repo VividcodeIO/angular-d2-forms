@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { EnableDisableControlsComponent } from './components/enable-disable-controls/enable-disable-controls.component';
 import { ShowHideControlsComponent } from './components/show-hide-controls/show-hide-controls.component';
 import { DependencyValuesComponent } from './components/dependency-values/dependency-values.component';

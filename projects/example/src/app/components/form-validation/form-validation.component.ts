@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormComponentConfig, requiredValidator, minLengthValidator, emailValidator } from '@vividcode/angular-d2-forms';
+import { emailValidator, FormComponentConfig, minLengthValidator, requiredValidator } from '@vividcode/angular-d2-forms';
 
 @Component({
   selector: 'app-form-validation',

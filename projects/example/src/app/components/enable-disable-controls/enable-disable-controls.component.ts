@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormComponentConfig, EnableDisableFormTransformation } from '@vividcode/angular-d2-forms';
+import { EnableDisableFormTransformation, FormComponentConfig } from '@vividcode/angular-d2-forms';
 
 @Component({
   selector: 'app-enable-disable-controls',
