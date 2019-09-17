@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormComponentConfig, ShowHideFormTransformation } from '@vividcode/angular-d2-forms';
+import { FormComponentConfig } from '@vividcode/angular-d2-forms';
 
 @Component({
   selector: 'app-show-hide-controls',
@@ -34,7 +34,14 @@ export class ShowHideControlsComponent implements OnInit {
         ]
       },
       transformations: [
-        new ShowHideFormTransformation('protocol', 'HTTP', ['path']),
+        {
+          type: 'show-hide',
+          opts: {
+            sourceFieldPath: 'protocol',
+            sourceFieldValue: 'HTTP',
+            targetFieldPaths: ['path'],
+          },
+        },
       ],
     };
   }

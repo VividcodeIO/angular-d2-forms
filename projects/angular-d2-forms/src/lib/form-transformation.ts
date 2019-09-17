@@ -42,6 +42,12 @@ export abstract class FormTransformation<T> {
   }
 }
 
+export interface EnableDisableTransformation {
+  sourceFieldPath: string;
+  targetFieldPaths: string[];
+  enableWhenIsTrue?: boolean;
+}
+
 export class EnableDisableFormTransformation<T> extends FormTransformation<T> {
   constructor(public readonly sourceFieldPath: string,
               public readonly targetFieldPaths: string[],
@@ -63,6 +69,13 @@ export class EnableDisableFormTransformation<T> extends FormTransformation<T> {
       }
     }));
   }
+}
+
+export interface ShowHideTransformation {
+  sourceFieldPath: string;
+  sourceFieldValue: any;
+  targetFieldPaths: string[];
+  showWhenValueMatches?: boolean;
 }
 
 export class ShowHideFormTransformation<T> extends FormTransformation<T> {
@@ -97,6 +110,12 @@ export interface TargetFieldValue {
   value: any;
 }
 
+export interface SetValueTransformation {
+  sourceFieldPath: string;
+  sourceFieldValue: any;
+  targetFieldValues: TargetFieldValue[];
+}
+
 export class SetValueFormTransformation<T> extends FormTransformation<T> {
   constructor(public readonly sourceFieldPath: string,
               public readonly sourceFieldValue: any,
@@ -120,4 +139,10 @@ export class SetValueFormTransformation<T> extends FormTransformation<T> {
     }));
   }
 
+}
+
+export interface FormTransformationConfig {
+  type: 'enable-disable' | 'show-hide' | 'setValue' | 'custom';
+  opts?: EnableDisableTransformation | ShowHideTransformation | SetValueTransformation;
+  transformation?: FormTransformation<any>;
 }

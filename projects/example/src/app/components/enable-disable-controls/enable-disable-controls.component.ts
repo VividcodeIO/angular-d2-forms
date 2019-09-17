@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EnableDisableFormTransformation, FormComponentConfig } from '@vividcode/angular-d2-forms';
+import { FormComponentConfig } from '@vividcode/angular-d2-forms';
 
 @Component({
   selector: 'app-enable-disable-controls',
@@ -31,7 +31,13 @@ export class EnableDisableControlsComponent implements OnInit {
         ],
       },
       transformations: [
-        new EnableDisableFormTransformation('isVip', ['discount']),
+        {
+          type: 'enable-disable',
+          opts: {
+            sourceFieldPath: 'isVip',
+            targetFieldPaths: ['discount'],
+          },
+        }
       ],
     };
   }

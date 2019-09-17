@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { EnableDisableFormTransformation, FormComponent, FormComponentConfig, FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
+import { FormComponent, FormComponentConfig, FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -47,7 +47,14 @@ export class FormEditorTimeUnitComponent extends FormFieldEditorComponent<number
         ],
       },
       transformations: [
-        new EnableDisableFormTransformation('isInfinite', ['value', 'unit'], false),
+        {
+          type: 'enable-disable',
+          opts: {
+            sourceFieldPath: 'isInfinite',
+            targetFieldPaths: ['value', 'unit'],
+            enableWhenIsTrue: false,
+          },
+        },
       ],
       value: formValue,
     };

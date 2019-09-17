@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EnableDisableFormTransformation, FormComponentConfig, SetValueFormTransformation } from '@vividcode/angular-d2-forms';
+import { FormComponentConfig } from '@vividcode/angular-d2-forms';
 
 @Component({
   selector: 'app-set-control-values',
@@ -31,17 +31,31 @@ export class SetControlValuesComponent implements OnInit {
         ],
       },
       transformations: [
-        new EnableDisableFormTransformation('useFixedValue', ['value1', 'value2'], false),
-        new SetValueFormTransformation('useFixedValue', true, [
-          {
-            fieldPath: 'value1',
-            value: 'Value 1 fixed',
+        {
+          type: 'enable-disable',
+          opts: {
+            sourceFieldPath: 'useFixedValue',
+            targetFieldPaths: ['value1', 'value2'],
+            enableWhenIsTrue: false,
           },
-          {
-            fieldPath: 'value2',
-            value: 'Value 2 fixed',
+        },
+        {
+          type: 'setValue',
+          opts: {
+            sourceFieldPath: 'useFixedValue',
+            sourceFieldValue: true,
+            targetFieldValues: [
+              {
+                fieldPath: 'value1',
+                value: 'Value 1 fixed',
+              },
+              {
+                fieldPath: 'value2',
+                value: 'Value 2 fixed',
+              }
+            ],
           }
-        ]),
+        },
       ]
     };
   }

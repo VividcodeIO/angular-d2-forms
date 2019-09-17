@@ -40,10 +40,7 @@ export class FormBuilderService {
                           formId?: string): FormFieldConfig<T> {
     const fieldValue = get(groupValue, field.name, null);
     if (!isFormFieldGroup(field)) {
-      formGroup.addControl(field.name, this.fb.control({
-        value: fieldValue,
-        disabled: field.disabled,
-      }, this.getValidators(field)));
+      formGroup.addControl(field.name, this.fb.control(fieldValue, this.getValidators(field)));
       const dependencyValues = (field.dependencies || []).reduce((obj, item) => {
         obj[item] = rootFormGroup.get(item).valueChanges;
         return obj;

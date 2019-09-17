@@ -5,14 +5,13 @@ import includes from 'lodash.includes';
 import concat from 'lodash.concat';
 import isEqual from 'lodash.isequal';
 import { Observable } from 'rxjs';
-import { FormTransformation } from './form-transformation';
+import { FormTransformationConfig } from './form-transformation';
 import { FormFieldValidator, getFormDisplayName } from './form-validation';
 
 export interface FormField<T> {
   name: string;
   label?: string;
   type?: string;
-  disabled?: boolean;
   validators?: FormFieldValidator[];
   data?: any;
   fields?: FormField<any>[];
@@ -66,10 +65,6 @@ export abstract class FormFieldConfig<T> {
 
   get label(): string {
     return getFormDisplayName(this.formField);
-  }
-
-  get disabled(): boolean {
-    return !!this.formField.disabled;
   }
 
   get data(): any {
@@ -137,7 +132,7 @@ export type FormFieldMatcher = (type: string, name?: string, formId?: string) =>
 export interface FormComponentConfig<T> {
   descriptor: FormDescriptor<T>;
   value?: T;
-  transformations?: FormTransformation<T>[];
+  transformations?: FormTransformationConfig[];
 }
 
 export const includesInFieldPaths = (fieldPaths: string[], fieldPath: string): boolean =>

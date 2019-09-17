@@ -4,7 +4,16 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FormBuilderService } from '../../services/form-builder.service';
 import flatMap from 'lodash.flatmap';
 import { FormGroup } from '@angular/forms';
-import { FormTransformationResult } from '../../form-transformation';
+import {
+  EnableDisableFormTransformation,
+  EnableDisableTransformation,
+  FormTransformationConfig,
+  FormTransformationResult,
+  SetValueFormTransformation,
+  SetValueTransformation,
+  ShowHideFormTransformation,
+  ShowHideTransformation
+} from '../../form-transformation';
 import { filter, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -60,7 +69,25 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
   }
 
   private _applyTransformations(formState: FormState<T>) {
-    return flatMap(this.config.transformations || [], transformation => transformation.transform(formState));
+    return flatMap(this.config.transformations || [], (config: FormTransformationConfig) => {
+      const {type, opts, transformation} = config;
+      switch (type) {
+        case 'enable-disable':
+          const edt = opts as EnableDisableTransformation;
+          return new EnableDisableFormTransformation(edt.sourceFieldPath, edt.targetFieldPaths, edt.enableWhenIsTrue).transform(formState);
+        case 'show-hide':
+          const sht = opts as ShowHideTransformation;
+          return new ShowHideFormTransformation(sht.sourceFieldPath, sht.sourceFieldValue, sht.targetFieldPaths, sht.showWhenValueMatches)
+            .transform(formState);
+        case 'setValue':
+          const svt = opts as SetValueTransformation;
+          return new SetValueFormTransformation(svt.sourceFieldPath, svt.sourceFieldValue, svt.targetFieldValues).transform(formState);
+        case 'custom':
+          return transformation.transform(formState);
+        default:
+          return [];
+      }
+    });
   }
 
   private _applyTransformationResult(result: FormTransformationResult, formGroup: FormGroup) {
