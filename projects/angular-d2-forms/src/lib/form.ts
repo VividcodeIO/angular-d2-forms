@@ -20,6 +20,7 @@ export interface FormField<T> {
 }
 
 export interface FormDescriptor<T> {
+  id?: string;
   fields?: FormField<any>[];
 }
 
@@ -140,9 +141,9 @@ export interface FormComponentConfig<T> {
   transformations?: FormTransformation<T>[];
 }
 
-export const includesInFieldPaths = (fieldPaths: string[], fieldPath: string) =>
+export const includesInFieldPaths = (fieldPaths: string[], fieldPath: string): boolean =>
   includes(fieldPaths, fieldPath);
 
-export const addFieldPaths = (fieldPaths: string[], fieldPath: string) => concat(fieldPaths, fieldPath);
+export const addFieldPaths = (fieldPaths: string[], fieldPath: string): string[] => concat(fieldPaths, fieldPath);
 
 export const removeFieldPaths = (fieldPaths: string[], fieldPath: string) => fieldPaths.filter(v => !isEqual(v, fieldPath));

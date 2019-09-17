@@ -26,7 +26,7 @@ export class FormBuilderService {
     const formGroup = this.fb.group({});
     return new FormConfig(
       descriptor,
-      descriptor.fields.map(field => this._resolveField(field, formGroup, [], value, formGroup)),
+      descriptor.fields.map(field => this._resolveField(field, formGroup, [], value, formGroup, descriptor.id)),
       formGroup,
       value
     );
@@ -36,7 +36,8 @@ export class FormBuilderService {
                           formGroup: FormGroup,
                           fieldPath: string[],
                           groupValue: any,
-                          rootFormGroup: FormGroup): FormFieldConfig<T> {
+                          rootFormGroup: FormGroup,
+                          formId?: string): FormFieldConfig<T> {
     const fieldValue = get(groupValue, field.name, null);
     if (!isFormFieldGroup(field)) {
       formGroup.addControl(field.name, this.fb.control({
@@ -49,7 +50,7 @@ export class FormBuilderService {
       }, {});
       return new SingleFormFieldConfig(
         field,
-        this.fieldEditorResolver.resolve(field),
+        this.fieldEditorResolver.resolve(field, formId),
         formGroup,
         fieldPath.concat(field.name),
         dependencyValues
@@ -60,7 +61,7 @@ export class FormBuilderService {
       const groupFieldPath = fieldPath.concat(field.name);
       return new FormFieldsGroupConfig(
         field,
-        field.fields.map(childField => this._resolveField(childField, group, groupFieldPath, fieldValue, rootFormGroup)),
+        field.fields.map(childField => this._resolveField(childField, group, groupFieldPath, fieldValue, rootFormGroup, formId)),
         group,
         groupFieldPath);
     }

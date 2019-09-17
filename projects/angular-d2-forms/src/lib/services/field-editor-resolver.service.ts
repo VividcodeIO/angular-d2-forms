@@ -11,7 +11,7 @@ export class FieldEditorResolverService {
   constructor(private fieldEditorRegistryService: FieldEditorRegistryService) {
   }
 
-  resolve(formField: FormField<any>): ComponentType<any> {
-    return this.fieldEditorRegistryService.find(formField);
+  resolve(formField: FormField<any>, formId?: string): ComponentType<any> {
+    return this.fieldEditorRegistryService.find(formField, formId);
   }
 }
