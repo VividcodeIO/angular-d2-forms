@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 
 export abstract class FormFieldEditorComponent<T> implements OnInit, OnDestroy {
   formFieldConfig: FormFieldConfig<T>;
-  _customValueChangeSubscription: Subscription;
+  private _customValueChangeSubscription: Subscription;
 
   ngOnInit(): void {
     this.onValue(this.formFieldConfig.formControl.value);

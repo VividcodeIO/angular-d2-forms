@@ -24,9 +24,9 @@ import { filter, switchMap } from 'rxjs/operators';
 })
 export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
   @Input() config: FormComponentConfig<T>;
-  _formConfig$ = new BehaviorSubject<FormConfig<T>>(null);
-  _hiddenFormFields = new BehaviorSubject<string[]>([]);
-  _valueChangeSubscription: Subscription;
+  private _formConfig$ = new BehaviorSubject<FormConfig<T>>(null);
+  private _hiddenFormFields = new BehaviorSubject<string[]>([]);
+  private _valueChangeSubscription: Subscription;
 
   constructor(private _formBuilderService: FormBuilderService) {
     this._valueChangeSubscription = this.valueChanges.subscribe(value => this._updateValue(value));

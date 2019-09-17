@@ -10,8 +10,9 @@ import { FormFieldValidator, getFormDisplayName } from './form-validation';
 
 export interface FormField<T> {
   name: string;
-  label?: string;
   type?: string;
+  label?: string;
+  translationKey?: string;
   validators?: FormFieldValidator[];
   data?: any;
   fields?: FormField<any>[];
