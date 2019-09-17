@@ -1,9 +1,1 @@
-<mat-card>
-  <mat-card-title>Custom form field editors</mat-card-title>
-  <mat-card-content>
-    <ad2forms-form #parentForm [config]="formConfig"></ad2forms-form>
-  </mat-card-content>
-  <mat-card-footer>
-    <pre>{{_valueChanges | async | json}}</pre>
-  </mat-card-footer>
-</mat-card>
+<app-form-example-viewer name="Custom form field editors" [formConfig]="formConfig"></app-form-example-viewer>

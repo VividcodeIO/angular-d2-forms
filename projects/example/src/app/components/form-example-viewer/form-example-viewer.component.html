@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-title>{{name}}</mat-card-title>
+  <mat-card-content>
+    <mat-tab-group [dynamicHeight]="true">
+      <mat-tab label="Live view">
+        <ad2forms-form #form [config]="formConfig"></ad2forms-form>
+      </mat-tab>
+      <mat-tab label="Form config">
+        <pre>{{formConfig | json}}</pre>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+  <mat-card-footer>
+    <div class="form-values">
+      <h4>Form values</h4>
+      <pre>{{_valueChanges | async | json}}</pre>
+    </div>
+  </mat-card-footer>
+</mat-card>
