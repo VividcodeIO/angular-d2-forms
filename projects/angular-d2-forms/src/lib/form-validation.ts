@@ -26,3 +26,17 @@ export function minLengthValidator(length: number): FormFieldValidator {
     validator: Validators.minLength(length),
   };
 }
+
+export function maxLengthValidator(length: number): FormFieldValidator {
+  return {
+    key: 'maxlength',
+    message: (field, result) => `The maximum length of ${getFormDisplayName(field)} is ${result.requiredLength}.`,
+    validator: Validators.maxLength(length),
+  };
+}
+
+export const emailValidator: FormFieldValidator = {
+  key: 'email',
+  message: (field) => `The value of ${getFormDisplayName(field)} is not a valid email address.`,
+  validator: Validators.email,
+};

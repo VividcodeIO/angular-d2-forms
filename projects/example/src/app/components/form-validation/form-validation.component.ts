@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormComponentConfig, requiredValidator, minLengthValidator } from '@vividcode/angular-d2-forms';
+import { FormComponentConfig, requiredValidator, minLengthValidator, emailValidator } from '@vividcode/angular-d2-forms';
 
 @Component({
   selector: 'app-form-validation',
@@ -28,7 +28,15 @@ export class FormValidationComponent implements OnInit {
             validators: [
               requiredValidator, minLengthValidator(8),
             ],
-          }
+          },
+          {
+            name: 'email',
+            label: 'Email',
+            type: 'string',
+            validators: [
+              requiredValidator, emailValidator,
+            ],
+          },
         ],
       },
     };
