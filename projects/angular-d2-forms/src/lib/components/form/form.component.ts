@@ -100,11 +100,11 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
     return this._formConfig$.value;
   }
 
-  get value() {
+  get value(): T {
     return this.formConfig && this.formConfig.formGroup.value;
   }
 
-  getRawValue() {
+  getRawValue(): T {
     return this.formConfig && this.formConfig.formGroup.getRawValue();
   }
 

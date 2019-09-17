@@ -7,10 +7,10 @@ import { FormComponentConfig, EnableDisableFormTransformation } from '@vividcode
   styleUrls: ['./enable-disable-controls.component.css']
 })
 export class EnableDisableControlsComponent implements OnInit {
-  checkBoxForm: FormComponentConfig<any>;
+  formConfig: FormComponentConfig<any>;
 
   constructor() {
-    this.checkBoxForm = {
+    this.formConfig = {
       descriptor: {
         fields: [
           {

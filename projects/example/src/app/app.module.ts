@@ -20,11 +20,14 @@ import { MatCardModule } from '@angular/material/card';
 import { UseFormValuesComponent } from './components/use-form-values/use-form-values.component';
 import { MatButtonModule } from '@angular/material/button';
 import { SetControlValuesComponent } from './components/set-control-values/set-control-values.component';
+import { FormEditorTimeUnitComponent } from './components/form-editor-time-unit/form-editor-time-unit.component';
+import { CustomFormFieldEditorsComponent } from './components/custom-form-field-editors/custom-form-field-editors.component';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
     service.registerGlobal('country-state', FormEditorStateSelectorComponent);
     service.registerGlobal('country-city', FormEditorCitySelectorComponent);
+    service.registerGlobal('time-unit', FormEditorTimeUnitComponent);
   };
   return func;
 }
@@ -40,6 +43,8 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     FormValidationComponent,
     UseFormValuesComponent,
     SetControlValuesComponent,
+    FormEditorTimeUnitComponent,
+    CustomFormFieldEditorsComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +62,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
   entryComponents: [
     FormEditorStateSelectorComponent,
     FormEditorCitySelectorComponent,
+    FormEditorTimeUnitComponent,
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: registerFormEditors, deps: [FieldEditorRegistryService], multi: true},
