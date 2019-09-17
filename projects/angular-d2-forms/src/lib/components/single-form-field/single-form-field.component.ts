@@ -13,7 +13,7 @@ export class SingleFormFieldComponent implements AfterViewInit {
   @Input() formId: string;
   @Input() config: SingleFormFieldConfig<any, any>;
   @Input() form: FormComponent<any>;
-  @ViewChild(CdkPortalOutlet) _portalOutlet: CdkPortalOutlet;
+  @ViewChild(CdkPortalOutlet, {static: true}) _portalOutlet: CdkPortalOutlet;
 
   @HostBinding('class')
   get hostClasses(): string {
