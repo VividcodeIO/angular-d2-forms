@@ -1,10 +1,11 @@
 {
   "name": "angular-d2-forms-projects",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-all": "ng build --project angular-d2-forms && ng build --project angular-d2-forms-material && ng build --project example",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -27,6 +28,7 @@
     "lodash.compact": "^3.0.1",
     "lodash.concat": "^4.5.0",
     "lodash.find": "^4.6.0",
+    "lodash.flatmap": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.includes": "^4.3.0",
     "lodash.isequal": "^4.5.0",
