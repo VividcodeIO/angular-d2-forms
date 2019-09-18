@@ -68,6 +68,10 @@ export abstract class FormFieldConfig<T> {
     return getFormDisplayName(this.formField);
   }
 
+  get fieldTranslationKey(): string {
+    return this.formField.translationKey;
+  }
+
   get data(): any {
     return this.formField.data;
   }
