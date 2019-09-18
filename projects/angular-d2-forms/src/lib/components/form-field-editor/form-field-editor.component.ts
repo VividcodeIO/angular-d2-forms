@@ -27,8 +27,15 @@ export abstract class FormFieldEditorComponent<T> implements OnInit, OnDestroy {
     return this.formFieldConfig.formControl.value;
   }
 
-  protected notifyValueChanged(value: T) {
-    this.formFieldConfig.formControl.setValue(value);
+  protected notifyValueChanged(value: T, options?: any) {
+    this.formFieldConfig.formControl.setValue(value, options);
+  }
+
+  protected updateViewValue(value: T) {
+    this.notifyValueChanged(value, {
+      onlySelf: true,
+      emitEvent: false,
+    });
   }
 
   protected get customValueChanges(): Observable<T> {
