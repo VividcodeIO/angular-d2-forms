@@ -21,8 +21,8 @@ export class FormEditorCitySelectorComponent extends FormFieldEditorComponent<st
       this.dependencyValues['country'],
       this.dependencyValues['state'],
     ]).pipe(
-      switchMap(([country, state]) => this._countryDataService.citiesByCountryAndState(country, state)),
       tap(() => this.notifyValueChanged(null)),
+      switchMap(([country, state]) => this._countryDataService.citiesByCountryAndState(country, state)),
     );
   }
 

@@ -18,8 +18,8 @@ export class FormEditorStateSelectorComponent extends FormFieldEditorComponent<s
 
   ngOnInit() {
     this._states = this.dependencyValues['country'].pipe(
-      switchMap(country => this._countryDataService.statesByCountry(country)),
       tap(() => this.notifyValueChanged(null)),
+      switchMap(country => this._countryDataService.statesByCountry(country)),
     );
   }
 
