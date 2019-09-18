@@ -4,7 +4,7 @@ import { FormComponentConfig } from '@vividcode/angular-d2-forms';
 @Component({
   selector: 'app-dependency-values',
   templateUrl: './dependency-values.component.html',
-  styleUrls: ['./dependency-values.component.css']
+  styleUrls: ['./dependency-values.component.css'],
 })
 export class DependencyValuesComponent implements OnInit {
   formConfig: FormComponentConfig<any>;

@@ -7,7 +7,7 @@ import { FormFieldEditorComponent } from '../form-field-editor/form-field-editor
 @Component({
   selector: 'ad2forms-single-form-field',
   templateUrl: './single-form-field.component.html',
-  styleUrls: ['./single-form-field.component.css']
+  styleUrls: ['./single-form-field.component.css'],
 })
 export class SingleFormFieldComponent implements AfterViewInit {
   @Input() formId: string;
