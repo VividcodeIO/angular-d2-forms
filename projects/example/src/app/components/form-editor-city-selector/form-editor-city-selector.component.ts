@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
 import { CountryDataService } from '../../services/country-data/country-data.service';
 import { combineLatest, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form-editor-city-selector',
@@ -17,8 +17,12 @@ export class FormEditorCitySelectorComponent extends FormFieldEditorComponent<st
   }
 
   ngOnInit() {
-    this._cities = combineLatest(this.dependencyValues['country'], this.dependencyValues['state']).pipe(
+    this._cities = combineLatest([
+      this.dependencyValues['country'],
+      this.dependencyValues['state'],
+    ]).pipe(
       switchMap(([country, state]) => this._countryDataService.citiesByCountryAndState(country, state)),
+      tap(() => this.notifyValueChanged(null)),
     );
   }
 

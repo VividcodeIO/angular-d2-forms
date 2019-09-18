@@ -16,10 +16,10 @@ export class FormFieldsGroupComponent implements OnInit {
   _formFields$: Observable<FormFieldConfig<any>[]>;
 
   ngOnInit() {
-    this._formFields$ = combineLatest(
+    this._formFields$ = combineLatest([
       of(this.config.fields),
       this.hiddenFormFields,
-    ).pipe(
+    ]).pipe(
       map(([formFields, hiddenFormFields]) => formFields.filter(field => !includesInFieldPaths(hiddenFormFields, field.fieldPathString))),
     );
   }

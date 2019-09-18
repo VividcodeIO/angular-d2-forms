@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormFieldEditorComponent } from '@vividcode/angular-d2-forms';
 import { CountryDataService } from '../../services/country-data/country-data.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -19,6 +19,7 @@ export class FormEditorStateSelectorComponent extends FormFieldEditorComponent<s
   ngOnInit() {
     this._states = this.dependencyValues['country'].pipe(
       switchMap(country => this._countryDataService.statesByCountry(country)),
+      tap(() => this.notifyValueChanged(null)),
     );
   }
 
