@@ -27,12 +27,17 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormExampleViewerComponent } from './components/form-example-viewer/form-example-viewer.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FormArrayValuesComponent } from './components/form-array-values/form-array-values.component';
+import { CustomFormGroupEditorComponent } from './components/custom-form-group-editor/custom-form-group-editor.component';
+import { FormEditorAppSettingsComponent } from './components/form-editor-app-settings/form-editor-app-settings.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AppSettingsDialogComponent } from './components/app-settings-dialog/app-settings-dialog.component';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
     service.registerGlobal('country-state', FormEditorStateSelectorComponent);
     service.registerGlobal('country-city', FormEditorCitySelectorComponent);
     service.registerGlobal('time-unit', FormEditorTimeUnitComponent);
+    service.registerGlobal('app-settings', FormEditorAppSettingsComponent);
   };
   return func;
 }
@@ -53,6 +58,9 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     ExampleHomeComponent,
     FormExampleViewerComponent,
     FormArrayValuesComponent,
+    CustomFormGroupEditorComponent,
+    FormEditorAppSettingsComponent,
+    AppSettingsDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,15 +76,19 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     MatButtonModule,
     MatToolbarModule,
     MatTabsModule,
+    MatDialogModule,
   ],
   entryComponents: [
     FormEditorStateSelectorComponent,
     FormEditorCitySelectorComponent,
     FormEditorTimeUnitComponent,
+    FormEditorAppSettingsComponent,
+    AppSettingsDialogComponent,
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: registerFormEditors, deps: [FieldEditorRegistryService], multi: true},
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -7,12 +7,11 @@
         </span>
       </mat-panel-title>
       <mat-panel-description>
-        <button mat-icon-button color="warn" (click)="removeItem(i)"><mat-icon>remove_circle_outline</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="removeItem(i)"><mat-icon>remove_circle</mat-icon></button>
       </mat-panel-description>
     </mat-expansion-panel-header>
     <ad2forms-form-fields-group [config]="item"
-                                [form]="form"
                                 [hiddenFormFields]="hiddenFormFields"></ad2forms-form-fields-group>
   </mat-expansion-panel>
 </ng-container>
-<button mat-raised-button color="primary" (click)="addItem()">Add</button>
+<button mat-raised-button color="primary" (click)="addItem()"><mat-icon>add_circle</mat-icon> Add</button>

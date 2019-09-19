@@ -1,7 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, HostBinding, Input, ViewChild } from '@angular/core';
 import { SingleFormFieldConfig } from '../../form';
 import { CdkPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
-import { FormComponent } from '../form/form.component';
 import { FormFieldEditorComponent } from '../form-field-editor/form-field-editor.component';
 import { Observable } from 'rxjs';
 
@@ -13,7 +12,6 @@ import { Observable } from 'rxjs';
 export class SingleFormFieldComponent implements AfterViewInit {
   @Input() formId: string;
   @Input() config: SingleFormFieldConfig<any, any>;
-  @Input() form: FormComponent<any>;
   @Input() hiddenFormFields: Observable<string[]>;
   @ViewChild(CdkPortalOutlet, {static: true}) _portalOutlet: CdkPortalOutlet;
 
@@ -33,7 +31,6 @@ export class SingleFormFieldComponent implements AfterViewInit {
       new ComponentPortal<FormFieldEditorComponent<any>>(this.config.componentType));
     const instance = componentRef.instance;
     instance.formFieldConfig = this.config;
-    instance.form = this.form;
     instance.hiddenFormFields = this.hiddenFormFields;
     this.changeDetectorRef.detectChanges();
   }

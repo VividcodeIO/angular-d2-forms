@@ -9,6 +9,7 @@ import { SetControlValuesComponent } from './components/set-control-values/set-c
 import { CustomFormFieldEditorsComponent } from './components/custom-form-field-editors/custom-form-field-editors.component';
 import { ExampleHomeComponent } from './components/example-home/example-home.component';
 import { FormArrayValuesComponent } from './components/form-array-values/form-array-values.component';
+import { CustomFormGroupEditorComponent } from './components/custom-form-group-editor/custom-form-group-editor.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,10 @@ const routes: Routes = [
   {
     path: 'form-array-values',
     component: FormArrayValuesComponent,
+  },
+  {
+    path: 'custom-form-group-editor',
+    component: CustomFormGroupEditorComponent,
   },
   {
     path: '',

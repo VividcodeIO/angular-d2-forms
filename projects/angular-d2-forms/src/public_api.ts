@@ -13,4 +13,5 @@ export { FieldEditorRegistryService } from './lib/services/field-editor-registry
 export { FormBuilderService } from './lib/services/form-builder.service';
 export { FormFieldEditorComponent } from './lib/components/form-field-editor/form-field-editor.component';
 export { FormFieldArrayEditorComponent } from './lib/components/form-field-editor/form-field-array-editor.component';
+export { FormFieldGroupEditorComponent } from './lib/components/form-field-editor/form-field-group-editor.component';
 export { FormComponent } from './lib/components/form/form.component';

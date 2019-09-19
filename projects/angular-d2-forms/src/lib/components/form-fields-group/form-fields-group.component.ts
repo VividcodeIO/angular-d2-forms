@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormFieldConfig, FormFieldsGroupConfig, includesInFieldPaths } from '../../form';
-import { FormComponent } from '../form/form.component';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -11,7 +10,6 @@ import { map } from 'rxjs/operators';
 })
 export class FormFieldsGroupComponent implements OnInit {
   @Input() config: FormFieldsGroupConfig<any>;
-  @Input() form: FormComponent<any>;
   @Input() hiddenFormFields: Observable<string[]>;
   _formFields$: Observable<FormFieldConfig<any>[]>;
 

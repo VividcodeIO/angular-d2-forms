@@ -2,11 +2,9 @@ import { OnDestroy, OnInit } from '@angular/core';
 import { DependencyValues, FormFieldConfig } from '../../form';
 import { ValidationErrors } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { FormComponent } from '../form/form.component';
 
 export abstract class FormFieldEditorComponent<T> implements OnInit, OnDestroy {
   formFieldConfig: FormFieldConfig<T>;
-  form: FormComponent<any>;
   hiddenFormFields: Observable<string[]>;
   private _customValueChangeSubscription: Subscription;
 

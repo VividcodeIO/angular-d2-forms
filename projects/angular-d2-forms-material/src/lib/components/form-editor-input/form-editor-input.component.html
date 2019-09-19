@@ -1,7 +1,7 @@
 <div [formGroup]="formFieldConfig.formGroup">
   <mat-form-field>
     <mat-label>{{formFieldConfig.label}}</mat-label>
-    <input matInput [formControlName]="formFieldConfig.fieldName">
+    <input autocomplete="off" matInput [formControlName]="formFieldConfig.fieldName">
     <mat-error *ngIf="hasErrors">{{errors}}</mat-error>
   </mat-form-field>
 </div>

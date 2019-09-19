@@ -36,9 +36,8 @@ export abstract class FormFieldArrayEditorComponent extends FormFieldEditorCompo
   }
 
   private _createItem(value: any, index: number) {
-    const {formField, rootFormGroup, formId} = this.formFieldConfig;
     const itemFormGroup = this.fb.group({});
     const fieldPath = this.formFieldConfig.fieldPath.concat(`${index}`);
-    return this.formBuilderService.buildArrayItemField(formField, itemFormGroup, fieldPath, value, rootFormGroup, formId);
+    return this.formBuilderService.buildArrayItemField(this.formFieldConfig, itemFormGroup, fieldPath, value);
   }
 }

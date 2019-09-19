@@ -61,15 +61,26 @@ export class FormBuilderService {
     }
   }
 
-  buildArrayItemField<T>(field: FormField<T>,
+  buildGroupField<T>(formFieldsGroupConfig: FormFieldConfig<T>, formGroup: FormGroup, value?: T) {
+    const {formField, fieldPath, rootFormGroup, formId} = formFieldsGroupConfig;
+    return new FormFieldsGroupConfig(
+      formField,
+      formField.fields.map(childField => this.buildField(childField, formGroup, fieldPath, value, rootFormGroup, formId)),
+      formGroup,
+      fieldPath,
+      rootFormGroup,
+      formId
+    );
+  }
+
+  buildArrayItemField<T>(formFieldConfig: FormFieldConfig<T>,
                          itemFormGroup: FormGroup,
                          fieldPath: string[],
-                         groupValue: any,
-                         rootFormGroup: FormGroup,
-                         formId?: string) {
+                         groupValue: any) {
+    const {formField, rootFormGroup, formId} = formFieldConfig;
     return new FormFieldsGroupConfig(
-      field,
-      field.fields.map(childField => this.buildField(childField, itemFormGroup, fieldPath, groupValue, rootFormGroup, formId)),
+      formField,
+      formField.fields.map(childField => this.buildField(childField, itemFormGroup, fieldPath, groupValue, rootFormGroup, formId)),
       itemFormGroup,
       fieldPath,
       rootFormGroup,

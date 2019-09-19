@@ -3,7 +3,7 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 form {
-  width: 30vw !important;
+  width: 40vw !important;
 }
 
 .mat-form-field {
