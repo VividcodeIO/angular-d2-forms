@@ -3,11 +3,15 @@ import { FormEditorInputComponent } from './components/form-editor-input/form-ed
 import { MatCheckboxModule, MatInputModule, MatSelectModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FieldEditorRegistryService } from '@vividcode/angular-d2-forms';
+import { AngularD2FormsModule, FieldEditorRegistryService } from '@vividcode/angular-d2-forms';
 import { FormEditorBooleanComponent } from './components/form-editor-boolean/form-editor-boolean.component';
 import { FormEditorNumberComponent } from './components/form-editor-number/form-editor-number.component';
 import { FormEditorMultilineComponent } from './components/form-editor-multiline/form-editor-multiline.component';
 import { FormEditorSelectComponent } from './components/form-editor-select/form-editor-select.component';
+import { FormEditorArrayComponent } from './components/form-editor-array/form-editor-array.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
@@ -16,6 +20,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     service.registerGlobal('number', FormEditorNumberComponent);
     service.registerGlobal('multiline-string', FormEditorMultilineComponent);
     service.registerGlobal('select', FormEditorSelectComponent);
+    service.registerGlobal('array', FormEditorArrayComponent);
   };
   return func;
 }
@@ -27,13 +32,18 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     FormEditorNumberComponent,
     FormEditorMultilineComponent,
     FormEditorSelectComponent,
+    FormEditorArrayComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    AngularD2FormsModule,
     MatInputModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatExpansionModule,
+    MatButtonModule,
+    MatIconModule,
   ],
   exports: [
     FormEditorInputComponent,
@@ -45,6 +55,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     FormEditorNumberComponent,
     FormEditorMultilineComponent,
     FormEditorSelectComponent,
+    FormEditorArrayComponent,
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: registerFormEditors, deps: [FieldEditorRegistryService], multi: true},

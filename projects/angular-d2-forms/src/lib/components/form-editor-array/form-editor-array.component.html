@@ -1,8 +1,0 @@
-<ng-container *ngFor="let item of items; let i = index;">
-  <ad2forms-form-fields-group [config]="item"
-                              [form]="form"
-                              [hiddenFormFields]="hiddenFormFields"></ad2forms-form-fields-group>
-  <button (click)="removeItem(i)">Remove</button>
-</ng-container>
-<hr>
-<button (click)="addItem()">Add</button>

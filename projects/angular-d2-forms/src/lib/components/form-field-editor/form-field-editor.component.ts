@@ -7,6 +7,7 @@ import { FormComponent } from '../form/form.component';
 export abstract class FormFieldEditorComponent<T> implements OnInit, OnDestroy {
   formFieldConfig: FormFieldConfig<T>;
   form: FormComponent<any>;
+  hiddenFormFields: Observable<string[]>;
   private _customValueChangeSubscription: Subscription;
 
   ngOnInit(): void {

@@ -1,7 +1,12 @@
 ad2forms-form {
   margin: 1vw;
+  display: block;
 }
 
 .form-values {
   margin: 1vw;
+}
+
+mat-tab-group {
+  max-height: 60vh;
 }

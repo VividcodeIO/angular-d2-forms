@@ -1,29 +1,20 @@
-import { Component } from '@angular/core';
-import { FormFieldEditorComponent } from '../form-field-editor/form-field-editor.component';
-import { FormBuilderService } from '../../services/form-builder.service';
-import { FormArray, FormBuilder } from '@angular/forms';
 import { FormFieldsGroupConfig } from '../../form';
-import { Observable, of } from 'rxjs';
+import { FormArray, FormBuilder } from '@angular/forms';
+import { FormBuilderService } from '../../services/form-builder.service';
+import { FormFieldEditorComponent } from './form-field-editor.component';
 
-@Component({
-  selector: 'ad2forms-form-editor-array',
-  templateUrl: './form-editor-array.component.html',
-  styleUrls: ['./form-editor-array.component.css']
-})
-export class FormEditorArrayComponent extends FormFieldEditorComponent<any[]> {
+export abstract class FormFieldArrayEditorComponent extends FormFieldEditorComponent<any[]> {
   items: FormFieldsGroupConfig<any>[] = [];
-  hiddenFormFields: Observable<string[]> = of([]);
   formArray: FormArray;
 
-  constructor(private _formBuilderService: FormBuilderService,
-              private _fb: FormBuilder) {
+  protected constructor(public formBuilderService: FormBuilderService,
+                        public fb: FormBuilder) {
     super();
   }
 
-
   protected onValue(value: any[]) {
     const {formGroup, fieldName} = this.formFieldConfig;
-    const formArray = this._fb.array([]);
+    const formArray = this.fb.array([]);
     formGroup.setControl(fieldName, formArray);
     const items = (value || []).map((v, index) => {
       return this._createItem(v, index);
@@ -46,8 +37,8 @@ export class FormEditorArrayComponent extends FormFieldEditorComponent<any[]> {
 
   private _createItem(value: any, index: number) {
     const {formField, rootFormGroup, formId} = this.formFieldConfig;
-    const itemFormGroup = this._fb.group({});
+    const itemFormGroup = this.fb.group({});
     const fieldPath = this.formFieldConfig.fieldPath.concat(`${index}`);
-    return this._formBuilderService.buildArrayItemField(formField, itemFormGroup, fieldPath, value, rootFormGroup, formId);
+    return this.formBuilderService.buildArrayItemField(formField, itemFormGroup, fieldPath, value, rootFormGroup, formId);
   }
 }
