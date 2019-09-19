@@ -1,5 +1,6 @@
 <ng-container *ngFor="let field of _formFields$ | async">
-  <ad2forms-form-fields-group *ngIf="field.isGroup; else singleFormField" [config]="field" [form]="form"></ad2forms-form-fields-group>
+  <ad2forms-form-fields-group *ngIf="!field.fieldType; else singleFormField" [config]="field" [form]="form"
+                              [hiddenFormFields]="hiddenFormFields"></ad2forms-form-fields-group>
   <ng-template #singleFormField>
     <ad2forms-single-form-field [config]="field" [form]="form"></ad2forms-single-form-field>
   </ng-template>

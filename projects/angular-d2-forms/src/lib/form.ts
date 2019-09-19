@@ -17,6 +17,7 @@ export interface FormField<T> {
   data?: any;
   fields?: FormField<any>[];
   dependencies?: string[];
+  isArray?: boolean;
 }
 
 export interface FormDescriptor<T> {
@@ -41,7 +42,9 @@ export abstract class FormFieldConfig<T> {
   protected constructor(public readonly formField: FormField<T>,
                         public readonly formGroup: FormGroup,
                         public readonly fieldPath: string[],
-                        public readonly dependencyValues: DependencyValues) {
+                        public readonly dependencyValues: DependencyValues,
+                        public readonly rootFormGroup: FormGroup,
+                        public readonly formId?: string) {
   }
 
   get fieldName(): string {
@@ -98,8 +101,10 @@ export class SingleFormFieldConfig<T, C> extends FormFieldConfig<T> {
               public readonly componentType: ComponentType<T>,
               formGroup: FormGroup,
               fieldPath: string[],
-              dependencyValues: DependencyValues = {}) {
-    super(formField, formGroup, fieldPath, dependencyValues);
+              dependencyValues: DependencyValues = {},
+              rootFormGroup: FormGroup,
+              formId?: string) {
+    super(formField, formGroup, fieldPath, dependencyValues, rootFormGroup, formId);
   }
 }
 
@@ -108,15 +113,17 @@ export class FormFieldsGroupConfig<T> extends FormFieldConfig<T> {
   constructor(formField: FormField<T>,
               public fields: FormFieldConfig<any>[] = [],
               formGroup: FormGroup,
-              fieldPath: string[]) {
-    super(formField, formGroup, fieldPath, {});
+              fieldPath: string[],
+              rootFormGroup: FormGroup,
+              formId?: string) {
+    super(formField, formGroup, fieldPath, {}, rootFormGroup, formId);
   }
 
 }
 
 export class FormConfig<T> extends FormFieldsGroupConfig<T> {
   constructor(formDescriptor: FormDescriptor<T>, fields: FormFieldConfig<any>[] = [], formGroup: FormGroup, public readonly value?: T) {
-    super({name: '_form', fields: formDescriptor.fields}, fields, formGroup, []);
+    super({name: '_form', fields: formDescriptor.fields}, fields, formGroup, [], formGroup, formDescriptor.id);
   }
 
   get formDescriptor(): FormDescriptor<T> {

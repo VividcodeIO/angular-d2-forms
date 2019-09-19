@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  FormComponentConfig,
-  FormConfig,
-  FormField,
-  FormFieldConfig,
-  FormFieldsGroupConfig,
-  isFormFieldGroup,
-  SingleFormFieldConfig
-} from '../form';
+import { FormComponentConfig, FormConfig, FormField, FormFieldConfig, FormFieldsGroupConfig, SingleFormFieldConfig } from '../form';
 import { FieldEditorResolverService } from './field-editor-resolver.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import get from 'lodash.get';
@@ -22,24 +14,24 @@ export class FormBuilderService {
   }
 
   build<T>(formComponentConfig: FormComponentConfig<T>): FormConfig<T> {
-    const { descriptor, value } = formComponentConfig;
+    const {descriptor, value} = formComponentConfig;
     const formGroup = this.fb.group({});
     return new FormConfig(
       descriptor,
-      descriptor.fields.map(field => this._resolveField(field, formGroup, [], value, formGroup, descriptor.id)),
+      descriptor.fields.map(field => this.buildField(field, formGroup, [], value, formGroup, descriptor.id)),
       formGroup,
       value
     );
   }
 
-  private _resolveField<T>(field: FormField<T>,
-                          formGroup: FormGroup,
-                          fieldPath: string[],
-                          groupValue: any,
-                          rootFormGroup: FormGroup,
-                          formId?: string): FormFieldConfig<T> {
+  buildField<T>(field: FormField<T>,
+                formGroup: FormGroup,
+                fieldPath: string[],
+                groupValue: any,
+                rootFormGroup: FormGroup,
+                formId?: string): FormFieldConfig<T> {
     const fieldValue = get(groupValue, field.name, null);
-    if (!isFormFieldGroup(field)) {
+    if (field.type) {
       formGroup.addControl(field.name, this.fb.control(fieldValue, this.getValidators(field)));
       const dependencyValues = (field.dependencies || []).reduce((obj, item) => {
         obj[item] = rootFormGroup.get(item).valueChanges;
@@ -50,7 +42,9 @@ export class FormBuilderService {
         this.fieldEditorResolver.resolve(field, formId),
         formGroup,
         fieldPath.concat(field.name),
-        dependencyValues
+        dependencyValues,
+        rootFormGroup,
+        formId
       );
     } else {
       const group = this.fb.group({});
@@ -58,10 +52,29 @@ export class FormBuilderService {
       const groupFieldPath = fieldPath.concat(field.name);
       return new FormFieldsGroupConfig(
         field,
-        field.fields.map(childField => this._resolveField(childField, group, groupFieldPath, fieldValue, rootFormGroup, formId)),
+        field.fields.map(childField => this.buildField(childField, group, groupFieldPath, fieldValue, rootFormGroup, formId)),
         group,
-        groupFieldPath);
+        groupFieldPath,
+        rootFormGroup,
+        formId
+      );
     }
+  }
+
+  buildArrayItemField<T>(field: FormField<T>,
+                         itemFormGroup: FormGroup,
+                         fieldPath: string[],
+                         groupValue: any,
+                         rootFormGroup: FormGroup,
+                         formId?: string) {
+    return new FormFieldsGroupConfig(
+      field,
+      field.fields.map(childField => this.buildField(childField, itemFormGroup, fieldPath, groupValue, rootFormGroup, formId)),
+      itemFormGroup,
+      fieldPath,
+      rootFormGroup,
+      formId
+    );
   }
 
   private getValidators(field: FormField<any>) {

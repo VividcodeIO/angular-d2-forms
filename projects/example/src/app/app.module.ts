@@ -26,6 +26,7 @@ import { ExampleHomeComponent } from './components/example-home/example-home.com
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormExampleViewerComponent } from './components/form-example-viewer/form-example-viewer.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { FormArrayValuesComponent } from './components/form-array-values/form-array-values.component';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
@@ -51,6 +52,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     CustomFormFieldEditorsComponent,
     ExampleHomeComponent,
     FormExampleViewerComponent,
+    FormArrayValuesComponent,
   ],
   imports: [
     BrowserModule,

@@ -20,7 +20,8 @@ export class FormFieldsGroupComponent implements OnInit {
       of(this.config.fields),
       this.hiddenFormFields,
     ]).pipe(
-      map(([formFields, hiddenFormFields]) => formFields.filter(field => !includesInFieldPaths(hiddenFormFields, field.fieldPathString))),
+      map(([formFields, hiddenFormFields]) =>
+        formFields.filter(field => !includesInFieldPaths(hiddenFormFields, field.fieldPathString))),
     );
   }
 

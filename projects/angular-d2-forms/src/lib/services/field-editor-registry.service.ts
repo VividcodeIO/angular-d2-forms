@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { FormField, FormFieldMatcher } from '../form';
-import { FieldBasicInputComponent } from '../components/field-basic-input/field-basic-input.component';
 import { ComponentType } from '@angular/cdk/portal';
 
 @Injectable({
@@ -11,7 +10,7 @@ export class FieldEditorRegistryService {
   private _matchers: [FormFieldMatcher, ComponentType<any>][] = [];
 
   constructor() {
-    this.registerGlobal(null, FieldBasicInputComponent);
+
   }
 
   registerGlobal(type: string, editor: ComponentType<any>) {

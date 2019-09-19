@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { FormComponent, FormComponentConfig } from '@vividcode/angular-d2-forms';
 import { Observable } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   templateUrl: './form-example-viewer.component.html',
   styleUrls: ['./form-example-viewer.component.css']
 })
-export class FormExampleViewerComponent implements OnInit {
+export class FormExampleViewerComponent implements AfterViewInit {
   @Input() name: string;
   @Input() formConfig: FormComponentConfig<any>;
   @ViewChild('form', {static: true}) _form: FormComponent<any>;
@@ -15,7 +15,7 @@ export class FormExampleViewerComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this._valueChanges = this._form.valueChanges;
   }
 

@@ -31,6 +31,7 @@ export class SingleFormFieldComponent implements AfterViewInit {
       new ComponentPortal<FormFieldEditorComponent<any>>(this.config.componentType));
     const instance = componentRef.instance;
     instance.formFieldConfig = this.config;
+    instance.form = this.form;
     this.changeDetectorRef.detectChanges();
   }
 

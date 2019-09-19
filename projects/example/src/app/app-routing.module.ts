@@ -8,6 +8,7 @@ import { UseFormValuesComponent } from './components/use-form-values/use-form-va
 import { SetControlValuesComponent } from './components/set-control-values/set-control-values.component';
 import { CustomFormFieldEditorsComponent } from './components/custom-form-field-editors/custom-form-field-editors.component';
 import { ExampleHomeComponent } from './components/example-home/example-home.component';
+import { FormArrayValuesComponent } from './components/form-array-values/form-array-values.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,10 @@ const routes: Routes = [
   {
     path: 'custom-form-field-editors',
     component: CustomFormFieldEditorsComponent,
+  },
+  {
+    path: 'form-array-values',
+    component: FormArrayValuesComponent,
   },
   {
     path: '',
