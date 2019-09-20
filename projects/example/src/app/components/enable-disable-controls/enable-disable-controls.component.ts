@@ -27,6 +27,28 @@ export class EnableDisableControlsComponent implements OnInit {
             name: 'discount',
             label: 'Discount',
             type: 'number',
+          },
+          {
+            name: 'nested',
+            label: 'Nested',
+            fields: [
+              {
+                name: 'nested-1',
+                label: 'Nested 1',
+                type: 'string',
+              },
+              {
+                name: 'nested-2',
+                label: 'Nested 2',
+                fields: [
+                  {
+                    name: 'nested-2-1',
+                    label: 'Nested 2-1',
+                    type: 'string',
+                  }
+                ],
+              }
+            ],
           }
         ],
       },

@@ -37,6 +37,7 @@ export class FieldEditorRegistryService {
   find(formField: FormField<any>, formId?: string): ComponentType<any> {
     return this._editors.get(this._generateKey(formField.type, formField.name, formId))
       || this._editors.get(this._generateKey(formField.type, formField.name, null))
+      || this._editors.get(this._generateKey(formField.type, null, formId))
       || this._editors.get(this._generateKey(formField.type, null, null))
       || this.findByMatcher(formField.type, formField.name, formId)
       || this._editors.get(this._generateKey(null, null, null));

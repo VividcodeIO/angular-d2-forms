@@ -26,6 +26,7 @@ import { FieldEditorRegistryService } from './services/field-editor-registry.ser
   exports: [
     FormComponent,
     FormFieldsGroupComponent,
+    SingleFormFieldComponent,
   ],
   providers: [
     FieldEditorRegistryService,

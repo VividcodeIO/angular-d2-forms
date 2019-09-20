@@ -10,7 +10,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./single-form-field.component.css'],
 })
 export class SingleFormFieldComponent implements AfterViewInit {
-  @Input() formId: string;
   @Input() config: SingleFormFieldConfig<any, any>;
   @Input() hiddenFormFields: Observable<string[]>;
   @ViewChild(CdkPortalOutlet, {static: true}) _portalOutlet: CdkPortalOutlet;

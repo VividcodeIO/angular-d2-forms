@@ -61,6 +61,12 @@ export class FormBuilderService {
     }
   }
 
+  replaceComponentType<T, C1, C2>(formFieldConfig: SingleFormFieldConfig<T, C1>, formId: string): SingleFormFieldConfig<T, C2> {
+    const {formField} = formFieldConfig;
+    const componentType = this.fieldEditorResolver.resolve(formField, formId);
+    return formFieldConfig.withComponentType(componentType, formId);
+  }
+
   buildGroupField<T>(formFieldsGroupConfig: FormFieldConfig<T>, formGroup: FormGroup, value?: T) {
     const {formField, fieldPath, rootFormGroup, formId} = formFieldsGroupConfig;
     return new FormFieldsGroupConfig(

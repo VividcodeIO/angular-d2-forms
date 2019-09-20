@@ -98,13 +98,23 @@ export abstract class FormFieldConfig<T> {
 export class SingleFormFieldConfig<T, C> extends FormFieldConfig<T> {
 
   constructor(formField: FormField<T>,
-              public readonly componentType: ComponentType<T>,
+              public readonly componentType: ComponentType<C>,
               formGroup: FormGroup,
               fieldPath: string[],
               dependencyValues: DependencyValues = {},
               rootFormGroup: FormGroup,
               formId?: string) {
     super(formField, formGroup, fieldPath, dependencyValues, rootFormGroup, formId);
+  }
+
+  withComponentType<C1>(componentType: ComponentType<C1>, formId?: string) {
+    return new SingleFormFieldConfig<T, C1>(this.formField,
+      componentType,
+      this.formGroup,
+      this.fieldPath,
+      this.dependencyValues,
+      this.rootFormGroup,
+      formId);
   }
 }
 
