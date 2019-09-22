@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { FormFieldConfig, FormFieldsGroupConfig, includesInFieldPaths } from '../../form';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,12 +8,12 @@ import { map } from 'rxjs/operators';
   templateUrl: './form-fields-group.component.html',
   styleUrls: ['./form-fields-group.component.css'],
 })
-export class FormFieldsGroupComponent implements OnInit {
+export class FormFieldsGroupComponent implements OnChanges {
   @Input() config: FormFieldsGroupConfig<any>;
   @Input() hiddenFormFields: Observable<string[]>;
   _formFields$: Observable<FormFieldConfig<any>[]>;
 
-  ngOnInit() {
+  ngOnChanges() {
     this._formFields$ = combineLatest([
       of(this.config.fields),
       this.hiddenFormFields,

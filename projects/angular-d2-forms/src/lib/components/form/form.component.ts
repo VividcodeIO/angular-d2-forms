@@ -25,7 +25,7 @@ import { filter, switchMap } from 'rxjs/operators';
 export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
   @Input() config: FormComponentConfig<T>;
   hiddenFormFields = new BehaviorSubject<string[]>([]);
-  private _formConfig$ = new BehaviorSubject<FormConfig<T>>(null);
+  formConfig$ = new BehaviorSubject<FormConfig<T>>(null);
   private _valueChangeSubscription: Subscription;
 
   constructor(private _formBuilderService: FormBuilderService) {
@@ -41,7 +41,8 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const formConfig = this._formBuilderService.build(this.config);
-    this._formConfig$.next(formConfig);
+    this.formConfig$.next(formConfig);
+    this.hiddenFormFields.next([]);
 
     if (this.config.value) {
       formConfig.formGroup.patchValue(this.config.value);
@@ -124,7 +125,7 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
   }
 
   get formConfig() {
-    return this._formConfig$.value;
+    return this.formConfig$.value;
   }
 
   get value(): T {
@@ -144,7 +145,7 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
   }
 
   get valueChanges(): Observable<T> {
-    return this._formConfig$.pipe(
+    return this.formConfig$.pipe(
       filter(v => !!v),
       switchMap(config => config.formGroup.valueChanges),
     );

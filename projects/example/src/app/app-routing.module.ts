@@ -10,6 +10,7 @@ import { CustomFormFieldEditorsComponent } from './components/custom-form-field-
 import { ExampleHomeComponent } from './components/example-home/example-home.component';
 import { FormArrayValuesComponent } from './components/form-array-values/form-array-values.component';
 import { CustomFormGroupEditorComponent } from './components/custom-form-group-editor/custom-form-group-editor.component';
+import { DynamicFormConfigComponent } from './components/dynamic-form-config/dynamic-form-config.component';
 
 const routes: Routes = [
   {
@@ -47,6 +48,10 @@ const routes: Routes = [
   {
     path: 'custom-form-group-editor',
     component: CustomFormGroupEditorComponent,
+  },
+  {
+    path: 'dynamic-form-config',
+    component: DynamicFormConfigComponent,
   },
   {
     path: '',

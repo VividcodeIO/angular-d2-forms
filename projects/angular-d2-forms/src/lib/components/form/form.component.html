@@ -1,3 +1,8 @@
-<form *ngIf="formConfig" [formGroup]="formConfig.formGroup">
-  <ad2forms-form-fields-group [config]="formConfig" [hiddenFormFields]="hiddenFormFields"></ad2forms-form-fields-group>
-</form>
+<ng-container *ngIf="formConfig$ | async; else noConfig; let config; ">
+  <form [formGroup]="config.formGroup">
+    <ad2forms-form-fields-group [config]="config" [hiddenFormFields]="hiddenFormFields"></ad2forms-form-fields-group>
+  </form>
+</ng-container>
+<ng-template #noConfig>
+  <span>No form config</span>
+</ng-template>
