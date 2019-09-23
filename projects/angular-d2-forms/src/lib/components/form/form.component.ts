@@ -3,6 +3,7 @@ import { addFieldPaths, FormComponentConfig, FormConfig, FormState, removeFieldP
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FormBuilderService } from '../../services/form-builder.service';
 import flatMap from 'lodash.flatmap';
+import includes from 'lodash.includes';
 import { FormGroup } from '@angular/forms';
 import {
   EnableDisableFormTransformation,
@@ -109,10 +110,14 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
         });
         break;
       case 'show':
-        this.hiddenFormFields.next(removeFieldPaths(this.hiddenFormFields.value, fieldPath));
+        if (includes(this.hiddenFormFields.value, fieldPath)) {
+          this.hiddenFormFields.next(removeFieldPaths(this.hiddenFormFields.value, fieldPath));
+        }
         break;
       case 'hide':
-        this.hiddenFormFields.next(addFieldPaths(this.hiddenFormFields.value, fieldPath));
+        if (!includes(this.hiddenFormFields.value, fieldPath)) {
+          this.hiddenFormFields.next(addFieldPaths(this.hiddenFormFields.value, fieldPath));
+        }
         break;
       case 'setValue':
         formControl.setValue(change.value, {
