@@ -32,6 +32,7 @@ import { FormEditorAppSettingsComponent } from './components/form-editor-app-set
 import { MatDialogModule } from '@angular/material/dialog';
 import { AppSettingsDialogComponent } from './components/app-settings-dialog/app-settings-dialog.component';
 import { DynamicFormConfigComponent } from './components/dynamic-form-config/dynamic-form-config.component';
+import { FormSectionsComponent } from './components/form-sections/form-sections.component';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
@@ -63,6 +64,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     FormEditorAppSettingsComponent,
     AppSettingsDialogComponent,
     DynamicFormConfigComponent,
+    FormSectionsComponent,
   ],
   imports: [
     BrowserModule,

@@ -11,6 +11,7 @@ import { ExampleHomeComponent } from './components/example-home/example-home.com
 import { FormArrayValuesComponent } from './components/form-array-values/form-array-values.component';
 import { CustomFormGroupEditorComponent } from './components/custom-form-group-editor/custom-form-group-editor.component';
 import { DynamicFormConfigComponent } from './components/dynamic-form-config/dynamic-form-config.component';
+import { FormSectionsComponent } from './components/form-sections/form-sections.component';
 
 const routes: Routes = [
   {
@@ -52,6 +53,10 @@ const routes: Routes = [
   {
     path: 'dynamic-form-config',
     component: DynamicFormConfigComponent,
+  },
+  {
+    path: 'form-sections',
+    component: FormSectionsComponent,
   },
   {
     path: '',

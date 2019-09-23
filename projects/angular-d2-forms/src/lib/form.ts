@@ -7,6 +7,7 @@ import isEqual from 'lodash.isequal';
 import { Observable } from 'rxjs';
 import { FormTransformationConfig } from './form-transformation';
 import { FormFieldValidator, getFormDisplayName } from './form-validation';
+import { InjectionToken, Type } from '@angular/core';
 
 export interface FormField<T> {
   name: string;
@@ -18,10 +19,12 @@ export interface FormField<T> {
   fields?: FormField<any>[];
   dependencies?: string[];
   isArray?: boolean;
+  section?: string;
 }
 
 export interface FormDescriptor<T> {
   id?: string;
+  name?: string;
   fields?: FormField<any>[];
 }
 
@@ -44,7 +47,8 @@ export abstract class FormFieldConfig<T> {
                         public readonly fieldPath: string[],
                         public readonly dependencyValues: DependencyValues,
                         public readonly rootFormGroup: FormGroup,
-                        public readonly formId?: string) {
+                        public readonly formId?: string,
+                        public readonly sectionConfig?: FormSectionConfig) {
   }
 
   get fieldName(): string {
@@ -77,6 +81,10 @@ export abstract class FormFieldConfig<T> {
 
   get data(): any {
     return this.formField.data;
+  }
+
+  get section(): string {
+    return this.formField.section;
   }
 
   get errors(): string[] {
@@ -125,15 +133,21 @@ export class FormFieldsGroupConfig<T> extends FormFieldConfig<T> {
               formGroup: FormGroup,
               fieldPath: string[],
               rootFormGroup: FormGroup,
-              formId?: string) {
-    super(formField, formGroup, fieldPath, {}, rootFormGroup, formId);
+              formId?: string,
+              sectionConfig?: FormSectionConfig) {
+    super(formField, formGroup, fieldPath, {}, rootFormGroup, formId, sectionConfig);
   }
 
 }
 
 export class FormConfig<T> extends FormFieldsGroupConfig<T> {
-  constructor(formDescriptor: FormDescriptor<T>, fields: FormFieldConfig<any>[] = [], formGroup: FormGroup, public readonly value?: T) {
-    super({name: '_form', fields: formDescriptor.fields}, fields, formGroup, [], formGroup, formDescriptor.id);
+  constructor(formDescriptor: FormDescriptor<T>,
+              fields: FormFieldConfig<any>[] = [],
+              formGroup: FormGroup,
+              public readonly value?: T,
+              sectionConfig?: FormSectionConfig) {
+    super({name: formDescriptor.name || '_form', fields: formDescriptor.fields},
+      fields, formGroup, [], formGroup, formDescriptor.id, sectionConfig);
   }
 
   get formDescriptor(): FormDescriptor<T> {
@@ -151,10 +165,16 @@ export class FormConfig<T> extends FormFieldsGroupConfig<T> {
 
 export type FormFieldMatcher = (type: string, name?: string, formId?: string) => boolean;
 
+export interface FormSectionConfig {
+  component?: Type<any>;
+  orders?: string[];
+}
+
 export interface FormComponentConfig<T> {
   descriptor: FormDescriptor<T>;
   value?: T;
   transformations?: FormTransformationConfig[];
+  section?: FormSectionConfig;
 }
 
 export const includesInFieldPaths = (fieldPaths: string[], fieldPath: string): boolean =>
@@ -163,3 +183,11 @@ export const includesInFieldPaths = (fieldPaths: string[], fieldPath: string): b
 export const addFieldPaths = (fieldPaths: string[], fieldPath: string): string[] => concat(fieldPaths, fieldPath);
 
 export const removeFieldPaths = (fieldPaths: string[], fieldPath: string) => fieldPaths.filter(v => !isEqual(v, fieldPath));
+
+export const FORM_FIELD = new InjectionToken('angular-d2-forms-form-field');
+
+export const SECTION_NAME = new InjectionToken('angular-d2-forms-section-name');
+
+export const SECTION_FIELDS = new InjectionToken('angular-d2-forms-section-fields');
+
+export const SECTION_TEMPLATE = new InjectionToken('angular-d2-forms-section-template');

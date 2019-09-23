@@ -1,6 +1,6 @@
 {
   "name": "@vividcode/angular-d2-forms",
-  "version": "0.4.2",
+  "version": "0.4.5",
   "author": {
     "name": "Fu Cheng"
   },
@@ -27,7 +27,8 @@
     "lodash.without": "^4.4.0",
     "lodash.flatmap": "^4.5.0",
     "lodash.groupby": "^4.6.0",
-    "lodash.set": "^4.3.2"
+    "lodash.set": "^4.3.2",
+    "lodash.sortby": "^4.7.0"
   },
   "repository": {
     "type": "git",

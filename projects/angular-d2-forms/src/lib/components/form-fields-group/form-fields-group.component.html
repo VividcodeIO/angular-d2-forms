@@ -1,7 +1,18 @@
-<ng-container *ngFor="let field of _formFields$ | async">
-  <ad2forms-form-fields-group *ngIf="!field.fieldType; else singleFormField" [config]="field"
-                              [hiddenFormFields]="hiddenFormFields"></ad2forms-form-fields-group>
-  <ng-template #singleFormField>
-    <ad2forms-single-form-field [config]="field" [hiddenFormFields]="hiddenFormFields"></ad2forms-single-form-field>
-  </ng-template>
+<ng-container *ngIf="_enableSections$ | async; else noSections">
+  <ng-container *ngFor="let injector of _fieldsBySection$ | async">
+   <ng-container *ngComponentOutlet="config.sectionConfig.component; injector: injector;">
+   </ng-container>
+  </ng-container>
 </ng-container>
+<ng-template #noSections>
+  <ng-container *ngTemplateOutlet="formFieldsTemplateRef; context: { fields: _formFields$ | async }"></ng-container>
+</ng-template>
+<ng-template let-fields="fields" #formFieldsTemplateRef>
+  <ng-container *ngFor="let field of fields">
+    <ad2forms-form-fields-group *ngIf="!field.fieldType; else singleFormField" [config]="field"
+                                [hiddenFormFields]="hiddenFormFields"></ad2forms-form-fields-group>
+    <ng-template #singleFormField>
+      <ad2forms-single-form-field [config]="field" [hiddenFormFields]="hiddenFormFields"></ad2forms-single-form-field>
+    </ng-template>
+  </ng-container>
+</ng-template>

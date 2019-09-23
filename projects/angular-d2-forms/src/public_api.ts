@@ -6,6 +6,7 @@ export { AngularD2FormsModule } from './lib/angular-d2-forms.module';
 export {
   FormComponentConfig, FormFieldsGroupConfig, FormDescriptor,
   FormField, FormState, DependencyValues, FormFieldConfig, FormFieldMatcher,
+  SECTION_NAME, SECTION_TEMPLATE, SECTION_FIELDS, FORM_FIELD,
 } from './lib/form';
 export * from './lib/form-transformation';
 export * from './lib/form-validation';

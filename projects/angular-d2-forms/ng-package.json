@@ -7,9 +7,6 @@
       "@angular/common": "@angular/common",
       "@angular/core": "@angular/core",
       "@angular/cdk": "@angular/cdk",
-      "@ngrx/effects": "@ngrx/effects",
-      "@ngrx/entity": "@ngrx/entity",
-      "@ngrx/store": "@ngrx/store",
       "lodash.concat": "lodash.concat",
       "lodash.without": "lodash.without",
       "lodash.get": "lodash.get",
@@ -18,7 +15,9 @@
       "lodash.find": "lodash.find",
       "lodash.includes": "lodash.includes",
       "lodash.flatmap": "lodash.flatmap",
-      "lodash.compact": "lodash.compact"
+      "lodash.compact": "lodash.compact",
+      "lodash.sortby": "lodash.sortby",
+      "lodash.groupby": "lodash.groupby"
     }
   }
 }

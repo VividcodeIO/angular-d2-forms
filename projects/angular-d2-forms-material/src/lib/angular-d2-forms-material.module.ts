@@ -12,6 +12,7 @@ import { FormEditorArrayComponent } from './components/form-editor-array/form-ed
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { FormSectionComponent } from './components/form-section/form-section.component';
 
 export function registerFormEditors(service: FieldEditorRegistryService) {
   const func = () => {
@@ -33,6 +34,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     FormEditorMultilineComponent,
     FormEditorSelectComponent,
     FormEditorArrayComponent,
+    FormSectionComponent,
   ],
   imports: [
     CommonModule,
@@ -44,10 +46,16 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     MatExpansionModule,
     MatButtonModule,
     MatIconModule,
+    MatExpansionModule,
   ],
   exports: [
     FormEditorInputComponent,
     FormEditorBooleanComponent,
+    FormEditorNumberComponent,
+    FormEditorMultilineComponent,
+    FormEditorSelectComponent,
+    FormEditorArrayComponent,
+    FormSectionComponent,
   ],
   entryComponents: [
     FormEditorInputComponent,
@@ -56,6 +64,7 @@ export function registerFormEditors(service: FieldEditorRegistryService) {
     FormEditorMultilineComponent,
     FormEditorSelectComponent,
     FormEditorArrayComponent,
+    FormSectionComponent,
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: registerFormEditors, deps: [FieldEditorRegistryService], multi: true},

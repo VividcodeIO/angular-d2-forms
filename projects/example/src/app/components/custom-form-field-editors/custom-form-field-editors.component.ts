@@ -1,16 +1,13 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormComponent, FormComponentConfig } from '@vividcode/angular-d2-forms';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { FormComponentConfig } from '@vividcode/angular-d2-forms';
 
 @Component({
   selector: 'app-custom-form-field-editors',
   templateUrl: './custom-form-field-editors.component.html',
   styleUrls: ['./custom-form-field-editors.component.css']
 })
-export class CustomFormFieldEditorsComponent implements OnInit, AfterViewInit {
+export class CustomFormFieldEditorsComponent implements OnInit {
   formConfig: FormComponentConfig<any>;
-  @ViewChild('parentForm', {static: true}) _form: FormComponent<any>;
-  _valueChanges: Observable<any>;
 
   constructor() {
     this.formConfig = {
@@ -36,10 +33,6 @@ export class CustomFormFieldEditorsComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-  }
-
-  ngAfterViewInit(): void {
-    this._valueChanges = this._form.valueChanges;
   }
 
 }

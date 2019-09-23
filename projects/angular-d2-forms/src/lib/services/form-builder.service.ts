@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormComponentConfig, FormConfig, FormField, FormFieldConfig, FormFieldsGroupConfig, SingleFormFieldConfig } from '../form';
+import {
+  FormComponentConfig,
+  FormConfig,
+  FormField,
+  FormFieldConfig,
+  FormFieldsGroupConfig,
+  FormSectionConfig,
+  SingleFormFieldConfig
+} from '../form';
 import { FieldEditorResolverService } from './field-editor-resolver.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import get from 'lodash.get';
@@ -14,13 +22,14 @@ export class FormBuilderService {
   }
 
   build<T>(formComponentConfig: FormComponentConfig<T>): FormConfig<T> {
-    const {descriptor, value} = formComponentConfig;
+    const {descriptor, value, section} = formComponentConfig;
     const formGroup = this.fb.group({});
     return new FormConfig(
       descriptor,
-      descriptor.fields.map(field => this.buildField(field, formGroup, [], value, formGroup, descriptor.id)),
+      descriptor.fields.map(field => this.buildField(field, formGroup, [], value, formGroup, descriptor.id, section)),
       formGroup,
-      value
+      value,
+      section,
     );
   }
 
@@ -29,7 +38,8 @@ export class FormBuilderService {
                 fieldPath: string[],
                 groupValue: any,
                 rootFormGroup: FormGroup,
-                formId?: string): FormFieldConfig<T> {
+                formId?: string,
+                section?: FormSectionConfig): FormFieldConfig<T> {
     const fieldValue = get(groupValue, field.name, null);
     if (field.type) {
       formGroup.addControl(field.name, this.fb.control(fieldValue, this.getValidators(field)));
@@ -56,7 +66,8 @@ export class FormBuilderService {
         group,
         groupFieldPath,
         rootFormGroup,
-        formId
+        formId,
+        section,
       );
     }
   }
@@ -67,7 +78,7 @@ export class FormBuilderService {
     return formFieldConfig.withComponentType(componentType, formId);
   }
 
-  buildGroupField<T>(formFieldsGroupConfig: FormFieldConfig<T>, formGroup: FormGroup, value?: T) {
+  buildGroupField<T>(formFieldsGroupConfig: FormFieldConfig<T>, formGroup: FormGroup, value?: T, section?: FormSectionConfig) {
     const {formField, fieldPath, rootFormGroup, formId} = formFieldsGroupConfig;
     return new FormFieldsGroupConfig(
       formField,
@@ -75,18 +86,21 @@ export class FormBuilderService {
       formGroup,
       fieldPath,
       rootFormGroup,
-      formId
+      formId,
+      section,
     );
   }
 
   buildArrayItemField<T>(formFieldConfig: FormFieldConfig<T>,
                          itemFormGroup: FormGroup,
                          fieldPath: string[],
-                         groupValue: any) {
+                         groupValue: any,
+                         section?: FormSectionConfig) {
     const {formField, rootFormGroup, formId} = formFieldConfig;
     return new FormFieldsGroupConfig(
       formField,
-      formField.fields.map(childField => this.buildField(childField, itemFormGroup, fieldPath, groupValue, rootFormGroup, formId)),
+      formField.fields.map(childField =>
+        this.buildField(childField, itemFormGroup, fieldPath, groupValue, rootFormGroup, formId, section)),
       itemFormGroup,
       fieldPath,
       rootFormGroup,

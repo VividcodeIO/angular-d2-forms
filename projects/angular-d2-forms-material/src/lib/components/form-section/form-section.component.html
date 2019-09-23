@@ -1,0 +1,7 @@
+<mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{section}}</mat-panel-title>
+  </mat-expansion-panel-header>
+  <ng-container *ngTemplateOutlet="template; context: {fields: fields};"></ng-container>
+</mat-expansion-panel>
+
