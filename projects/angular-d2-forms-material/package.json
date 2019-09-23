@@ -1,6 +1,6 @@
 {
   "name": "@vividcode/angular-d2-forms-material",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "author": {
     "name": "Fu Cheng"
   },
@@ -14,11 +14,11 @@
     "Material"
   ],
   "peerDependencies": {
-    "@angular/animations": "~8.2.6",
-    "@angular/common": "~8.2.6",
-    "@angular/core": "~8.2.6",
-    "@angular/cdk": "^8.2.0",
-    "@angular/material": "^8.2.0",
+    "@angular/animations": "^8.0.0",
+    "@angular/common": "^8.0.0",
+    "@angular/core": "^8.0.0",
+    "@angular/cdk": "^8.0.0",
+    "@angular/material": "^8.0.0",
     "@vividcode/angular-d2-forms": "^0.4.0"
   },
   "repository": {
