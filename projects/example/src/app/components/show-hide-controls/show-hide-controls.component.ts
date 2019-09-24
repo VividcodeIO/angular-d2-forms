@@ -33,6 +33,9 @@ export class ShowHideControlsComponent implements OnInit {
           }
         ]
       },
+      value: {
+        protocol: 'TCP',
+      },
       transformations: [
         {
           type: 'show-hide',

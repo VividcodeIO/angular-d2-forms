@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import {
   FORM_FIELD,
   FormFieldConfig,
@@ -8,45 +8,46 @@ import {
   SECTION_NAME,
   SECTION_TEMPLATE
 } from '../../form';
-import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
 import get from 'lodash.get';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'ad2forms-form-fields-group',
   templateUrl: './form-fields-group.component.html',
   styleUrls: ['./form-fields-group.component.css'],
 })
-export class FormFieldsGroupComponent implements OnChanges {
+export class FormFieldsGroupComponent implements OnChanges, OnInit, OnDestroy {
   @Input() config: FormFieldsGroupConfig<any>;
   @Input() hiddenFormFields: Observable<string[]>;
-  _formFields$: Observable<FormFieldConfig<any>[]>;
-  _enableSections$: Observable<boolean>;
-  _fieldsBySection$: Observable<any>;
+  _formFields: FormFieldConfig<any>[];
+  _enableSections: boolean;
+  _fieldsBySection: any;
+  _fieldStyles: any = {
+  };
+  private _subscription: Subscription;
   @ViewChild('formFieldsTemplateRef', {static: true}) formFieldsTemplateRef: TemplateRef<any>;
 
   constructor(public injector: Injector) {
 
   }
 
+  ngOnInit(): void {
+    this._subscription = this.hiddenFormFields.subscribe(hiddenFormFields => this._updateFieldClasses(hiddenFormFields));
+  }
 
-  ngOnChanges() {
-    this._formFields$ = this.hiddenFormFields.pipe(
-      map((hiddenFormFields) =>
-        this.config.fields.filter(field => !includesInFieldPaths(hiddenFormFields, field.fieldPathString))),
-    );
-    this._enableSections$ = this._formFields$.pipe(
-      map(fields => this._enableSections(fields)),
-    );
-    this._fieldsBySection$ = this._formFields$.pipe(
-      filter(fields => this._enableSections(fields)),
-      map(fields => groupBy(fields, f => f.section || 'default')),
-      map(fieldsBySection => {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.config && changes.config.currentValue) {
+      const config: FormFieldsGroupConfig<any> = changes.config.currentValue;
+      const fields: FormFieldConfig<any>[] = config.fields;
+      this._formFields = fields;
+      this._enableSections = this._shouldEnableSections(fields);
+      if (this._enableSections) {
+        const fieldsBySection = groupBy(fields, f => f.section || 'default');
         const sections = sortBy(Object.keys(fieldsBySection), section =>
           (get(this.config, 'sectionConfig.orders', [])).indexOf(section), s => s);
-        return sections.map(section => {
+        this._fieldsBySection = sections.map(section => {
           const sectionName = section || 'default';
           return Injector.create({
             providers: [
@@ -66,11 +67,24 @@ export class FormFieldsGroupComponent implements OnChanges {
             parent: this.injector,
           });
         });
-      }),
-    );
+      }
+    }
   }
 
-  private _enableSections(fields: FormFieldConfig<any>[]): boolean {
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
+  }
+
+  private _shouldEnableSections(fields: FormFieldConfig<any>[]): boolean {
     return get(this.config, 'sectionConfig.component') && fields.some(v => !!v.section);
+  }
+
+  private _updateFieldClasses(hiddenFormFields: string[]) {
+    this._fieldStyles = this._formFields.reduce((obj, field) => {
+      obj[field.fieldPathString] = includesInFieldPaths(hiddenFormFields || [], field.fieldPathString) ? {display: 'none'} : {};
+      return obj;
+    }, {});
   }
 }

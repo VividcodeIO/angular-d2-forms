@@ -48,7 +48,6 @@ export class FormComponent<T> implements OnInit, OnChanges, OnDestroy {
     if (this.config.value) {
       formConfig.formGroup.patchValue(this.config.value);
     }
-    this._updateValue(formConfig.formGroup.value);
   }
 
   ngOnDestroy(): void {

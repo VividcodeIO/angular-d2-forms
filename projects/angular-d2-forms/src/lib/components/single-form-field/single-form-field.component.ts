@@ -18,7 +18,8 @@ export class SingleFormFieldComponent implements AfterViewInit {
   get hostClasses(): string {
     return this.config ? [
       'ad2forms-field--name-' + this.config.fieldName,
-      'ad2forms-field--type-' + this.config.fieldType
+      'ad2forms-field--type-' + this.config.fieldType,
+      'ad2forms-field--path-' + this.config.fieldPath.join('_'),
     ].join(' ') : '';
   }
 
